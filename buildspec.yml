@@ -14,6 +14,9 @@ phases:
     commands:
       # Discover and run unit tests in the 'tests' directory
       - yarn tests
+  build:
+    commands:
+      - echo Entered the build phase...
       - yarn build
   post_build:
     commands:
