@@ -1,10 +1,13 @@
-var express = require('express');
-var port = process.env.PORT || 3000;
-var app = express(),
-path = require('path'),
-publicDir = path.join(__dirname,'public');
+const express = require('express');
+const port = process.env.PORT || 3000;
+const app = express();
+const path = require('path');
 
-app.use(express.static(publicDir))
+//publicDir = path.join(__dirname,'public');
+//app.use(express.static(publicDir))
+
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'build/index.html')));
 
 app.listen(port);
 module.exports = app;
