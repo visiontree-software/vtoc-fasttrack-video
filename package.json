@@ -65,7 +65,7 @@
 		"start": "concurrently npm:server npm:dev",
 		"dev": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "jest",
+		"test": "mocha --recursive tests --exit",
 		"eject": "react-scripts eject",
 		"lint": "eslint src/**/*.{ts,tsx}",
 		"server": "node server.js",
