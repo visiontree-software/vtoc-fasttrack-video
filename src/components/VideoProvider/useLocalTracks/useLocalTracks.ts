@@ -7,12 +7,12 @@ import Video, { LocalVideoTrack, LocalAudioTrack, CreateLocalTrackOptions } from
 function ensureMediaPermissions() {
   return navigator.mediaDevices
     .enumerateDevices()
-    .then(devices => devices.every(device => !(device.deviceId && device.label)))
-    .then(shouldAskForMediaPermissions => {
+    .then((devices) => devices.every((device) => !(device.deviceId && device.label)))
+    .then((shouldAskForMediaPermissions) => {
       if (shouldAskForMediaPermissions) {
         navigator.mediaDevices
           .getUserMedia({ audio: true, video: true })
-          .then(mediaStream => mediaStream.getTracks().forEach(track => track.stop()));
+          .then((mediaStream) => mediaStream.getTracks().forEach((track) => track.stop()));
       }
     });
 }
@@ -22,7 +22,7 @@ export function useLocalAudioTrack() {
 
   useEffect(() => {
     ensureMediaPermissions().then(() =>
-      Video.createLocalAudioTrack().then(newTrack => {
+      Video.createLocalAudioTrack().then((newTrack) => {
         setTrack(newTrack);
       })
     );
@@ -57,7 +57,7 @@ export function useLocalVideoTrack() {
     }
 
     return ensureMediaPermissions().then(() =>
-      Video.createLocalVideoTrack(options).then(newTrack => {
+      Video.createLocalVideoTrack(options).then((newTrack) => {
         setTrack(newTrack);
         return newTrack;
       })
@@ -86,7 +86,7 @@ export default function useLocalTracks() {
   const audioTrack = useLocalAudioTrack();
   const [videoTrack, getLocalVideoTrack] = useLocalVideoTrack();
 
-  const localTracks = [audioTrack, videoTrack].filter(track => track !== undefined) as (
+  const localTracks = [audioTrack, videoTrack].filter((track) => track !== undefined) as (
     | LocalAudioTrack
     | LocalVideoTrack
   )[];

@@ -85,7 +85,7 @@ describe('the useLocalVideoToggle hook', () => {
       expect(mockGetLocalVideoTrack).toHaveBeenCalled();
     });
 
-    it('should call mockLocalParticipant.publishTrack when a localVideoTrack does not exist and localParticipant does exist', done => {
+    it('should call mockLocalParticipant.publishTrack when a localVideoTrack does not exist and localParticipant does exist', (done) => {
       const mockGetLocalVideoTrack = jest.fn(() => Promise.resolve('mockTrack'));
 
       const mockLocalParticipant = new EventEmitter() as LocalParticipant;

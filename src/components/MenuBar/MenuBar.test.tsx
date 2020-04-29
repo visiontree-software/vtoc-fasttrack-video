@@ -134,7 +134,7 @@ describe('the MenuBar component', () => {
     expect(window.history.replaceState).not.toHaveBeenCalled();
   });
 
-  it('should call getToken() and connect() on submit', done => {
+  it('should call getToken() and connect() on submit', (done) => {
     mockedUseRoomState.mockImplementation(() => 'disconnected');
     mockedUseVideoContext.mockImplementation(
       () => ({ isConnecting: false, connect: mockConnect, room: {}, localTracks: [] } as any)

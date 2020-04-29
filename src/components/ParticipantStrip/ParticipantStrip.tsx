@@ -37,7 +37,7 @@ export default function ParticipantStrip() {
           isSelected={selectedParticipant === localParticipant}
           onClick={() => setSelectedParticipant(localParticipant)}
         />
-        {participants.map(participant => (
+        {participants.map((participant) => (
           <Participant
             key={participant.sid}
             participant={participant}

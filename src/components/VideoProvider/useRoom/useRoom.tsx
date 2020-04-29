@@ -20,10 +20,10 @@ export default function useRoom(localTracks: LocalTrack[], onError: Callback, op
   }, [localTracks]);
 
   const connect = useCallback(
-    token => {
+    (token) => {
       setIsConnecting(true);
       return Video.connect(token, { ...options, tracks: [] }).then(
-        newRoom => {
+        (newRoom) => {
           setRoom(newRoom);
           const disconnect = () => newRoom.disconnect();
 
@@ -40,7 +40,7 @@ export default function useRoom(localTracks: LocalTrack[], onError: Callback, op
           // @ts-ignore
           window.twilioRoom = newRoom;
 
-          localTracksRef.current.forEach(track =>
+          localTracksRef.current.forEach((track) =>
             // Tracks can be supplied as arguments to the Video.connect() function and they will automatically be published.
             // However, tracks must be published manually in order to set the priority on them.
             // All video tracks are published with 'low' priority. This works because the video
@@ -59,7 +59,7 @@ export default function useRoom(localTracks: LocalTrack[], onError: Callback, op
             window.addEventListener('pagehide', disconnect);
           }
         },
-        error => {
+        (error) => {
           onError(error);
           setIsConnecting(false);
         }
