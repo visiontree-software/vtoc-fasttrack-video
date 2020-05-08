@@ -68,6 +68,7 @@ export default function MenuBar() {
 
   const [name, setName] = useState<string>(user?.displayName || '');
   const [roomName, setRoomName] = useState<string>('');
+  const [passcode, setPasscode] = useState<string>('');
 
   useEffect(() => {
     if (URLRoomName) {
@@ -75,21 +76,14 @@ export default function MenuBar() {
     }
   }, [URLRoomName]);
 
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const handleRoomNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setRoomName(event.target.value);
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // If this app is deployed as a twilio function, don't change the URL because routing isn't supported.
-    if (!window.location.origin.includes('twil.io')) {
-      window.history.replaceState(null, '', window.encodeURI(`/room/${roomName}${window.location.search || ''}`));
+    const token = window.sessionStorage.getItem('token');
+    setRoomName('VTOC Video Room');
+    setName('VTOC Patient');
+    if (token) {
+      connect(token);
     }
-    getToken(name, roomName).then(token => connect(token));
   };
 
   return (
@@ -97,34 +91,12 @@ export default function MenuBar() {
       <Toolbar className={classes.toolbar}>
         {roomState === 'disconnected' ? (
           <form className={classes.form} onSubmit={handleSubmit}>
-            {window.location.search.includes('customIdentity=true') || !user?.displayName ? (
-              <TextField
-                id="menu-name"
-                label="Name"
-                className={classes.textField}
-                value={name}
-                onChange={handleNameChange}
-                margin="dense"
-              />
-            ) : (
-              <Typography className={classes.displayName} variant="body1">
-                {user.displayName}
-              </Typography>
-            )}
-            <TextField
-              id="menu-room"
-              label="Room"
-              className={classes.textField}
-              value={roomName}
-              onChange={handleRoomNameChange}
-              margin="dense"
-            />
             <Button
               className={classes.joinButton}
               type="submit"
               color="primary"
               variant="contained"
-              disabled={isConnecting || !name || !roomName || isFetching}
+              disabled={isConnecting || isFetching}
             >
               Join Room
             </Button>
