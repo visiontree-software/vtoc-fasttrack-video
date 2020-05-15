@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import ToggleFullscreenButton from './ToggleFullScreenButton/ToggleFullScreenButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Menu from './Menu/Menu';
+import { ReactComponent as VTOCLogo } from './logo.svg';
 
 import { useAppState } from '../../state';
 import { useParams } from 'react-router-dom';
@@ -36,9 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexWrap: 'wrap',
       alignItems: 'center',
-      [theme.breakpoints.up('md')]: {
-        marginLeft: '2.2em',
-      },
+      // [theme.breakpoints.up('md')]: {
+      //   marginLeft: '2.2em',
+      // },
     },
     textField: {
       marginLeft: theme.spacing(1),
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     joinButton: {
       margin: '1em',
+    },
+    vtocLogo: {
+      width: '11rem',
+      display: 'block',
     },
   })
 );
@@ -89,6 +94,7 @@ export default function MenuBar() {
   return (
     <AppBar className={classes.container} position="static">
       <Toolbar className={classes.toolbar}>
+        <VTOCLogo className={classes.vtocLogo} />
         {roomState === 'disconnected' ? (
           <form className={classes.form} onSubmit={handleSubmit}>
             <Button

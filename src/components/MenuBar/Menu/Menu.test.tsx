@@ -28,7 +28,7 @@ describe('the Menu component', () => {
     it('should include the logout button in the menu', () => {
       mockUseAppState.mockImplementation(() => ({ user: { displayName: 'Test User' }, signOut: jest.fn() }));
       const wrapper = shallow(<Menu />);
-      expect(wrapper.contains('Logout')).toBe(true);
+      expect(wrapper.contains('Exit')).toBe(true);
     });
 
     it('should display the user name in the menu', () => {
@@ -75,7 +75,7 @@ describe('the Menu component', () => {
     it('should not include the logout button in the menu', () => {
       mockUseAppState.mockImplementation(() => ({ user: null }));
       const wrapper = shallow(<Menu />);
-      expect(wrapper.contains('Logout')).toBe(false);
+      expect(wrapper.contains('Exit')).toBe(false);
     });
   });
 });
