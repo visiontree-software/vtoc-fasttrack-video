@@ -57,7 +57,10 @@ Resources:
       OptionSettings:
       - Namespace: aws:elasticbeanstalk:environment
         OptionName: EnvironmentType
-        Value: SingleInstance
+        Value: LoadBalanced
+      - Namespace: aws:ec2:instances
+        OptionName: InstanceTypes
+				Value: t2.small
       - Namespace: aws:elasticbeanstalk:environment
         OptionName: ServiceRole
         Value: !Ref 'EBTrustRole'
