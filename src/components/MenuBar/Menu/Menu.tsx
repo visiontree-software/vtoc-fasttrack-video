@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AboutDialog from '../AboutDialog/AboutDialog';
@@ -12,18 +12,8 @@ import UserAvatar from '../UserAvatar/UserAvatar';
 import { useAppState } from '../../../state';
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    exitButton: {
-      margin: '.5em',
-    },
-  })
-);
-
 export default function Menu() {
-  const classes = useStyles();
-  const { user, signOut } = useAppState();
-  const { room, localTracks } = useVideoContext();
+  const { user } = useAppState();
 
   const [aboutOpen, setAboutOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,26 +21,16 @@ export default function Menu() {
 
   const anchorRef = useRef<HTMLDivElement>(null);
 
-  const handleSignOut = useCallback(() => {
-    console.log('handle signout');
-    room.disconnect?.();
-    localTracks.forEach(track => track.stop());
-    signOut?.();
-  }, [room.disconnect, localTracks, signOut]);
-
   return (
     <div ref={anchorRef}>
-      {/* <IconButton color="secondary" onClick={() => setMenuOpen(state => !state)}>
-        {user ? <UserAvatar user={user} /> : <MoreIcon />}
-      </IconButton> */}
-      <Button className={classes.exitButton} variant="outlined" color="secondary" onClick={handleSignOut}>
-        Exit Video
-      </Button>
+      <IconButton onClick={() => setMenuOpen(state => !state)}>
+        <MoreIcon />
+      </IconButton>
       <MenuContainer open={menuOpen} onClose={() => setMenuOpen(state => !state)} anchorEl={anchorRef.current}>
         {user?.displayName && <MenuItem disabled>{user.displayName}</MenuItem>}
         <MenuItem onClick={() => setAboutOpen(true)}>About</MenuItem>
         <MenuItem onClick={() => setSettingsOpen(true)}>Settings</MenuItem>
-        {user && <MenuItem onClick={handleSignOut}>Logout</MenuItem>}
+        {/* {user && <MenuItem onClick={handleSignOut}>Logout</MenuItem>} */}
       </MenuContainer>
       <AboutDialog
         open={aboutOpen}

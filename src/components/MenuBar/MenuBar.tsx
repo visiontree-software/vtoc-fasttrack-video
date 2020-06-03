@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -61,15 +61,19 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '11rem',
       display: 'block',
     },
+    exitButton: {
+      marginLeft: '.5em',
+    },
   })
 );
 
 export default function MenuBar() {
   const classes = useStyles();
   const { URLRoomName } = useParams();
-  const { user, getToken, isFetching } = useAppState();
+  const { user, getToken, isFetching, signOut } = useAppState();
   const { isConnecting, connect } = useVideoContext();
   const roomState = useRoomState();
+  const { room, localTracks } = useVideoContext();
 
   const [name, setName] = useState<string>(user?.displayName || '');
   const [roomName, setRoomName] = useState<string>('');
@@ -90,6 +94,13 @@ export default function MenuBar() {
       connect(token);
     }
   };
+
+  const handleSignOut = useCallback(() => {
+    console.log('handle signout');
+    room.disconnect?.();
+    localTracks.forEach(track => track.stop());
+    signOut?.();
+  }, [localTracks, room.disconnect, signOut]);
 
   return (
     <AppBar className={classes.container} position="static">
@@ -112,10 +123,14 @@ export default function MenuBar() {
           <h3>{roomName}</h3>
         )}
         <div className={classes.rightButtonContainer}>
-          <FlipCameraButton />
+          {/* <FlipCameraButton /> */}
           <LocalAudioLevelIndicator />
           <ToggleFullscreenButton />
           <Menu />
+
+          <Button className={classes.exitButton} variant="contained" color="primary" onClick={handleSignOut}>
+            Exit Video
+          </Button>
         </div>
       </Toolbar>
     </AppBar>
