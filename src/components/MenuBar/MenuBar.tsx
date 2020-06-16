@@ -115,7 +115,7 @@ export default function MenuBar() {
               variant="contained"
               disabled={isAcquiringLocalTracks || isConnecting || isFetching}
             >
-              Join Room
+              Join Virtual Visit
             </Button>
             {(isConnecting || isFetching) && <CircularProgress className={classes.loadingSpinner} />}
           </form>
@@ -129,7 +129,7 @@ export default function MenuBar() {
           <Menu />
 
           <Button className={classes.exitButton} variant="contained" color="primary" onClick={handleSignOut}>
-            Exit Video
+            Exit Virtual Visit
           </Button>
         </div>
       </Toolbar>
