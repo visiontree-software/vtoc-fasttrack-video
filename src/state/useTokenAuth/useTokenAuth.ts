@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const fetchToken = () => {
-  const match = window.location.search.match(/token=(.*)&?/);
-  const token = match ? match[1] : window.sessionStorage.getItem('token');
-  console.debug('*** fetchToken result:', token);
-  return token;
+export const fetchUserParams = () => {
+  let params = new URLSearchParams(window.location.search);
+
+  const token = params.get('token') || '';
+  const userId = params.get('userId') || '';
+  const user = params.get('user') || '';
+
+  for (var pair of params.entries()) {
+    window.sessionStorage.setItem(pair[0], pair[1]);
+  }
+
+  console.debug('*** fetchUserParams result:', token);
+  return { token, userId, user };
 };
 
 export default function useTokenAuth() {
@@ -14,21 +22,17 @@ export default function useTokenAuth() {
   const [user, setUser] = useState<{ displayName: undefined; photoURL: undefined; token: string } | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
 
-  const getToken = useCallback(
-    (name: string, room: string) => {
-      console.debug('*** getToken called');
-      const token = fetchToken() || '';
-      return Promise.resolve(token);
-    },
-    [user]
-  );
+  const getToken = useCallback((name: string, room: string) => {
+    console.debug('*** getToken called');
+    const token = fetchUserParams().token;
+    return Promise.resolve(token);
+  }, []);
 
   useEffect(() => {
-    const passcode = fetchToken();
+    const userInfo = fetchUserParams();
 
-    if (passcode) {
-      setUser({ passcode } as any);
-      window.sessionStorage.setItem('token', passcode);
+    if (userInfo.token) {
+      setUser({ userInfo } as any);
       history.replace(window.location.pathname);
     }
     setIsAuthReady(true);
@@ -41,7 +45,7 @@ export default function useTokenAuth() {
 
   const signOut = useCallback(() => {
     setUser(null);
-    window.sessionStorage.removeItem('token');
+    window.sessionStorage.clear();
     return Promise.resolve();
   }, []);
 
