@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { LocalVideoTrack, Participant, RemoteVideoTrack } from 'twilio-video';
 
+import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 import BandwidthWarning from '../BandwidthWarning/BandwidthWarning';
 import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackSwitchedOff';
 import usePublications from '../../hooks/usePublications/usePublications';
@@ -55,6 +56,9 @@ export default function MainParticipantInfo({ participant, children }: MainParti
 
   const videoTrack = useTrack(screenSharePublication || videoPublication);
   const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack as LocalVideoTrack | RemoteVideoTrack);
+  const {
+    room: { localParticipant },
+  } = useVideoContext();
 
   return (
     <div
@@ -63,7 +67,7 @@ export default function MainParticipantInfo({ participant, children }: MainParti
     >
       <div className={classes.infoContainer}>
         <h4 className={classes.identity}>
-          {participant.identity}
+          {localParticipant ? 'You' : participant.identity}
           {!isVideoEnabled && <VideocamOff />}
         </h4>
       </div>

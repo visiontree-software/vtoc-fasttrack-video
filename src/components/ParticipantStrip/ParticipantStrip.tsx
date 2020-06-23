@@ -33,12 +33,14 @@ export default function ParticipantStrip() {
     <Container>
       <ScrollContainer>
         <Participant
+          isLocal="true"
           participant={localParticipant}
           isSelected={selectedParticipant === localParticipant}
           onClick={() => setSelectedParticipant(localParticipant)}
         />
-        {participants.map((participant) => (
+        {participants.map(participant => (
           <Participant
+            isLocal="false"
             key={participant.sid}
             participant={participant}
             isSelected={selectedParticipant === participant}

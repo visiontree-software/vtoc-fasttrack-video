@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
       display: 'flex',
       alignItems: 'center',
+      color: '#fff',
     },
     infoRow: {
       display: 'flex',
@@ -73,13 +74,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ParticipantInfoProps {
+  isLocal: string;
   participant: Participant;
   children: React.ReactNode;
   onClick: () => void;
   isSelected: boolean;
 }
 
-export default function ParticipantInfo({ participant, onClick, isSelected, children }: ParticipantInfoProps) {
+export default function ParticipantInfo({ isLocal, participant, onClick, isSelected, children }: ParticipantInfoProps) {
   const publications = usePublications(participant);
 
   const audioPublication = publications.find(p => p.kind === 'audio');
@@ -108,7 +110,7 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
         <div className={classes.infoRow}>
           <h4 className={classes.identity}>
             <ParticipantConnectionIndicator participant={participant} />
-            {participant.identity}
+            {isLocal ? 'You' : participant.identity}
           </h4>
           <NetworkQualityLevel qualityLevel={networkQualityLevel} />
         </div>

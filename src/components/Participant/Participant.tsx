@@ -4,6 +4,7 @@ import ParticipantTracks from '../ParticipantTracks/ParticipantTracks';
 import { Participant as IParticipant } from 'twilio-video';
 
 interface ParticipantProps {
+  isLocal: string;
   participant: IParticipant;
   disableAudio?: boolean;
   enableScreenShare?: boolean;
@@ -12,6 +13,7 @@ interface ParticipantProps {
 }
 
 export default function Participant({
+  isLocal,
   participant,
   disableAudio,
   enableScreenShare,
@@ -19,7 +21,7 @@ export default function Participant({
   isSelected,
 }: ParticipantProps) {
   return (
-    <ParticipantInfo participant={participant} onClick={onClick} isSelected={isSelected}>
+    <ParticipantInfo isLocal={isLocal} participant={participant} onClick={onClick} isSelected={isSelected}>
       <ParticipantTracks participant={participant} disableAudio={disableAudio} enableScreenShare={enableScreenShare} />
     </ParticipantInfo>
   );
