@@ -118,7 +118,9 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
         }),
       }
     );
+    console.log(response);
     const data = await response.json();
+    console.log(data);
 
     updatedParticipant.fullname = `${data.firstName + ' ' + data.lastName}`;
   })();
