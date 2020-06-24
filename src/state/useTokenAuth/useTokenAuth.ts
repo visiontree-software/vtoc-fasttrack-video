@@ -6,14 +6,14 @@ export const fetchUserParams = () => {
 
   const token = params.get('token') || '';
   const userId = params.get('userId') || '';
-  const user = params.get('user') || '';
+  const userType = params.get('userType') || '';
 
   for (var pair of params.entries()) {
     window.sessionStorage.setItem(pair[0], pair[1]);
   }
 
   console.debug('*** fetchUserParams result:', token);
-  return { token, userId, user };
+  return { token, userId, userType };
 };
 
 export default function useTokenAuth() {
