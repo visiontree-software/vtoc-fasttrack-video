@@ -5,6 +5,7 @@ export const fetchUserParams = () => {
   let params = new URLSearchParams(window.location.search);
 
   const token = params.get('token') || '';
+  const roomId = params.get('roomId') || '';
   const userId = params.get('userId') || '';
   const userType = params.get('userType') || '';
 

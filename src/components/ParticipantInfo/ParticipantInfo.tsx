@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { Base64 } from 'js-base64';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { LocalAudioTrack, LocalVideoTrack, Participant, RemoteAudioTrack, RemoteVideoTrack } from 'twilio-video';
 
@@ -98,6 +99,30 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
 
   const classes = useStyles();
 
+  const updatedParticipant = Object.create(participant);
+
+  (async () => {
+    const response = await fetch(
+      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Basic ${Base64.encode(
+            `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
+          )}`,
+        },
+        body: JSON.stringify({
+          roomId: sessionStorage.getItem('roomId'),
+          userId: Number(sessionStorage.getItem('userId')),
+        }),
+      }
+    );
+    const data = await response.json();
+
+    updatedParticipant.fullname = `${data.firstName + ' ' + data.lastName}`;
+  })();
+
   return (
     <div
       className={clsx(classes.container, {
@@ -110,7 +135,7 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
         <div className={classes.infoRow}>
           <h4 className={classes.identity}>
             <ParticipantConnectionIndicator participant={participant} />
-            {isLocal ? 'You' : participant.identity}
+            {isLocal ? 'You' : updatedParticipant.fullname}
           </h4>
           <NetworkQualityLevel qualityLevel={networkQualityLevel} />
         </div>
