@@ -100,25 +100,25 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
   const classes = useStyles();
 
   const updatedParticipant = Object.create(participant);
+  const roomId = sessionStorage.getItem('roomId');
+  const userId = Number(sessionStorage.getItem('userId'));
 
   (async () => {
     const response = await fetch(
-      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName',
+      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+        roomId +
+        '&userId=' +
+        userId,
       {
         method: 'POST',
         headers: {
-          'content-type': 'application/json',
           Authorization: `Basic ${Base64.encode(
             `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
           )}`,
         },
-        body: JSON.stringify({
-          roomId: sessionStorage.getItem('roomId'),
-          userId: Number(sessionStorage.getItem('userId')),
-        }),
       }
     );
-    console.log(response);
+
     const data = await response.json();
     console.log(data);
 
