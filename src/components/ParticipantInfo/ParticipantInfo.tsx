@@ -75,14 +75,20 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ParticipantInfoProps {
-  isLocal: string;
+  userName: string;
   participant: Participant;
   children: React.ReactNode;
   onClick: () => void;
   isSelected: boolean;
 }
 
-export default function ParticipantInfo({ isLocal, participant, onClick, isSelected, children }: ParticipantInfoProps) {
+export default function ParticipantInfo({
+  userName,
+  participant,
+  onClick,
+  isSelected,
+  children,
+}: ParticipantInfoProps) {
   const publications = usePublications(participant);
 
   const audioPublication = publications.find(p => p.kind === 'audio');
@@ -99,31 +105,31 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
 
   const classes = useStyles();
 
-  const updatedParticipant = Object.create(participant);
-  const roomId = sessionStorage.getItem('roomId');
-  const userId = Number(sessionStorage.getItem('userId'));
+  //const updatedParticipant = Object.create(participant);
+  //const roomId = sessionStorage.getItem('roomId');
+  //const userId = Number(sessionStorage.getItem('userId'));
 
-  (async () => {
-    const response = await fetch(
-      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
-        roomId +
-        '&userId=' +
-        userId,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${Base64.encode(
-            `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
-          )}`,
-        },
-      }
-    );
+  // (async () => {
+  //   const response = await fetch(
+  //     'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+  //       roomId +
+  //       '&userId=' +
+  //       userId,
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `Basic ${Base64.encode(
+  //           `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
+  //         )}`,
+  //       },
+  //     }
+  //   );
 
-    const data = await response.json();
-    console.log(data);
+  //   const data = await response.json();
+  //   console.log(data);
 
-    updatedParticipant.fullname = `${data.firstName + ' ' + data.lastName}`;
-  })();
+  //   updatedParticipant.fullname = `${data.firstName + ' ' + data.lastName}`;
+  //})();
 
   return (
     <div
@@ -137,7 +143,7 @@ export default function ParticipantInfo({ isLocal, participant, onClick, isSelec
         <div className={classes.infoRow}>
           <h4 className={classes.identity}>
             <ParticipantConnectionIndicator participant={participant} />
-            {isLocal ? 'You' : updatedParticipant.fullname}
+            {userName}
           </h4>
           <NetworkQualityLevel qualityLevel={networkQualityLevel} />
         </div>
