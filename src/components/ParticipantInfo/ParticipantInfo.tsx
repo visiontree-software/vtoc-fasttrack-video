@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ParticipantInfoProps {
-  userName: string;
+  username: string;
   participant: Participant;
   children: React.ReactNode;
   onClick: () => void;
@@ -83,7 +83,7 @@ interface ParticipantInfoProps {
 }
 
 export default function ParticipantInfo({
-  userName,
+  username,
   participant,
   onClick,
   isSelected,
@@ -105,32 +105,6 @@ export default function ParticipantInfo({
 
   const classes = useStyles();
 
-  //const updatedParticipant = Object.create(participant);
-  //const roomId = sessionStorage.getItem('roomId');
-  //const userId = Number(sessionStorage.getItem('userId'));
-
-  // (async () => {
-  //   const response = await fetch(
-  //     'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
-  //       roomId +
-  //       '&userId=' +
-  //       userId,
-  //     {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: `Basic ${Base64.encode(
-  //           `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
-  //         )}`,
-  //       },
-  //     }
-  //   );
-
-  //   const data = await response.json();
-  //   console.log(data);
-
-  //   updatedParticipant.fullname = `${data.firstName + ' ' + data.lastName}`;
-  //})();
-
   return (
     <div
       className={clsx(classes.container, {
@@ -143,7 +117,7 @@ export default function ParticipantInfo({
         <div className={classes.infoRow}>
           <h4 className={classes.identity}>
             <ParticipantConnectionIndicator participant={participant} />
-            {userName}
+            {username}
           </h4>
           <NetworkQualityLevel qualityLevel={networkQualityLevel} />
         </div>
