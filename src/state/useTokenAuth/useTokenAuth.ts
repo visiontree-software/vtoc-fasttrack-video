@@ -6,7 +6,6 @@ export const fetchUserParams = () => {
 
   const token = params.get('token') || '';
   const roomId = params.get('roomId') || '';
-  const userId = params.get('userId') || '';
   const userType = params.get('userType') || '';
 
   for (var pair of params.entries()) {
@@ -14,7 +13,7 @@ export const fetchUserParams = () => {
   }
 
   console.debug('*** fetchUserParams result:', token);
-  return { token, userId, userType };
+  return { token, roomId, userType };
 };
 
 export default function useTokenAuth() {

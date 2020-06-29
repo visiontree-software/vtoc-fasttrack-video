@@ -16,7 +16,7 @@ interface ParticipantProps {
 
 async function fetchPartipantName(id: string): Promise<any | { error: string }> {
   const roomId = sessionStorage.getItem('roomId');
-  const userId = Number(sessionStorage.getItem('userId'));
+  const userId = Number(id);
 
   try {
     const response = await fetch(
