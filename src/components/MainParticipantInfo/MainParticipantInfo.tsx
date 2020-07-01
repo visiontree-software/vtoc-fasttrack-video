@@ -96,7 +96,7 @@ export default function MainParticipantInfo({ participant, children }: MainParti
     room: { localParticipant },
   } = useVideoContext();
 
-  const [participantName, setUsername] = useState('You');
+  const [participantName, setUsername] = useState('');
 
   useEffect(() => {
     const userId = user!.identity;

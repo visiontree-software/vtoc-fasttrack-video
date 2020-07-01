@@ -133,7 +133,7 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
 
   const classes = useStyles();
 
-  const [participantName, setUsername] = useState('You');
+  const [participantName, setUsername] = useState('');
 
   useEffect(() => {
     const userId = user!.identity;
@@ -143,6 +143,8 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
       fetchPartipantName(participant.identity, user!.roomName).then(result => {
         setUsername(result.firstName + ' ' + result.lastName);
       });
+    } else {
+      setUsername('You');
     }
   }, [participant, user]);
 
