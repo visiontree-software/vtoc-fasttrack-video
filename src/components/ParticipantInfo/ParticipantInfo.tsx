@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Base64 } from 'js-base64';
+import { useEffect, useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { LocalAudioTrack, LocalVideoTrack, Participant, RemoteAudioTrack, RemoteVideoTrack } from 'twilio-video';
 
@@ -16,6 +17,8 @@ import useParticipantNetworkQualityLevel from '../../hooks/useParticipantNetwork
 import usePublications from '../../hooks/usePublications/usePublications';
 import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackSwitchedOff';
 import useTrack from '../../hooks/useTrack/useTrack';
+
+import { useAppState } from '../../state';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,20 +78,45 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ParticipantInfoProps {
-  username: string;
   participant: Participant;
   children: React.ReactNode;
   onClick: () => void;
   isSelected: boolean;
 }
 
-export default function ParticipantInfo({
-  username,
-  participant,
-  onClick,
-  isSelected,
-  children,
-}: ParticipantInfoProps) {
+async function fetchPartipantName(id: string, room: string): Promise<any | { error: string }> {
+  const roomId = room;
+  const userId = parseInt(id, 10);
+
+  try {
+    const response = await fetch(
+      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+        roomId +
+        '&userId=' +
+        userId,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Base64.encode(
+            `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
+          )}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.code };
+    }
+    return await response.json();
+  } catch (err) {
+    return { error: err };
+  }
+}
+
+export default function ParticipantInfo({ participant, onClick, isSelected, children }: ParticipantInfoProps) {
+  const { user } = useAppState();
+
   const publications = usePublications(participant);
 
   const audioPublication = publications.find(p => p.kind === 'audio');
@@ -105,6 +133,19 @@ export default function ParticipantInfo({
 
   const classes = useStyles();
 
+  const [participantName, setUsername] = useState('You');
+
+  useEffect(() => {
+    const userId = user!.identity;
+    const participantId = parseInt(participant.identity, 10);
+
+    if (userId !== participantId) {
+      fetchPartipantName(participant.identity, user!.roomName).then(result => {
+        setUsername(result.firstName + ' ' + result.lastName);
+      });
+    }
+  }, [participant, user]);
+
   return (
     <div
       className={clsx(classes.container, {
@@ -117,7 +158,7 @@ export default function ParticipantInfo({
         <div className={classes.infoRow}>
           <h4 className={classes.identity}>
             <ParticipantConnectionIndicator participant={participant} />
-            {username}
+            {participantName}
           </h4>
           <NetworkQualityLevel qualityLevel={networkQualityLevel} />
         </div>

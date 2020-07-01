@@ -8,9 +8,8 @@ interface UserInfo {
   photoURL?: string;
   passcode?: string;
   token: string;
-  identity: string;
+  identity: number;
   roomName: string;
-  roomId: string;
   userType: string;
 }
 

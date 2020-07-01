@@ -33,7 +33,6 @@ export default function ParticipantStrip() {
     <Container>
       <ScrollContainer>
         <Participant
-          username="You"
           participant={localParticipant}
           isSelected={selectedParticipant === localParticipant}
           onClick={() => setSelectedParticipant(localParticipant)}

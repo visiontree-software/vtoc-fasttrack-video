@@ -1,25 +1,42 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import jwt from 'jsonwebtoken';
+
+const getDecodedAccessToken = (token: string): any => {
+  try {
+    return jwt.decode(token);
+  } catch (Error) {
+    return null;
+  }
+};
 
 export const fetchUserParams = () => {
   let params = new URLSearchParams(window.location.search);
 
-  const token = params.get('token') || '';
-  const roomId = params.get('roomId') || '';
-  const userType = params.get('userType') || '';
+  const token = window.sessionStorage.getItem('token') || params.get('token') || '';
+  const userType = window.sessionStorage.getItem('userType') || params.get('userType') || '';
+
+  const decoded = getDecodedAccessToken(token);
+
+  const identity = Number(decoded.grants.identity);
+  const roomName = decoded.grants.video.room;
 
   for (var pair of params.entries()) {
     window.sessionStorage.setItem(pair[0], pair[1]);
   }
 
-  console.debug('*** fetchUserParams result:', token);
-  return { token, roomId, userType };
+  return { token, identity, roomName, userType };
 };
 
 export default function useTokenAuth() {
   const history = useHistory();
 
-  const [user, setUser] = useState<{ displayName: undefined; photoURL: undefined; token: string } | null>(null);
+  const [user, setUser] = useState<{
+    token: string;
+    identity: number;
+    roomName: string;
+    userType: string;
+  } | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
 
   const getToken = useCallback((name: string, room: string) => {
@@ -32,7 +49,7 @@ export default function useTokenAuth() {
     const userInfo = fetchUserParams();
 
     if (userInfo.token) {
-      setUser({ userInfo } as any);
+      setUser({ ...userInfo } as any);
       history.replace(window.location.pathname);
     }
     setIsAuthReady(true);

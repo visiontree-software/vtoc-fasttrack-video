@@ -88,8 +88,8 @@ export default function MenuBar() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const token = window.sessionStorage.getItem('token');
-    setRoomName('VTOC Video Room');
-    setName('VTOC Patient');
+    //setRoomName('VTOC Video Room');
+    //setName('VTOC Patient');
     if (token) {
       connect(token);
     }

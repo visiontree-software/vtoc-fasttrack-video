@@ -1,5 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
+import { Base64 } from 'js-base64';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { LocalVideoTrack, Participant, RemoteVideoTrack } from 'twilio-video';
 
@@ -9,6 +11,8 @@ import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackS
 import usePublications from '../../hooks/usePublications/usePublications';
 import useTrack from '../../hooks/useTrack/useTrack';
 import VideocamOff from '@material-ui/icons/VideocamOff';
+
+import { useAppState } from '../../state';
 
 const useStyles = makeStyles({
   container: {
@@ -46,7 +50,39 @@ interface MainParticipantInfoProps {
   children: React.ReactNode;
 }
 
+async function fetchPartipantName(id: string, room: string): Promise<any | { error: string }> {
+  const roomId = room;
+  const userId = parseInt(id, 10);
+
+  try {
+    const response = await fetch(
+      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+        roomId +
+        '&userId=' +
+        userId,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Base64.encode(
+            `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
+          )}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.code };
+    }
+    return await response.json();
+  } catch (err) {
+    return { error: err };
+  }
+}
+
 export default function MainParticipantInfo({ participant, children }: MainParticipantInfoProps) {
+  const { user } = useAppState();
+
   const classes = useStyles();
 
   const publications = usePublications(participant);
@@ -60,6 +96,21 @@ export default function MainParticipantInfo({ participant, children }: MainParti
     room: { localParticipant },
   } = useVideoContext();
 
+  const [participantName, setUsername] = useState('You');
+
+  useEffect(() => {
+    const userId = user!.identity;
+    const participantId = parseInt(participant.identity, 10);
+
+    if (userId !== participantId) {
+      fetchPartipantName(participant.identity, user!.roomName).then(result => {
+        setUsername(result.firstName + ' ' + result.lastName);
+      });
+    } else {
+      setUsername('You');
+    }
+  }, [participant, user]);
+
   return (
     <div
       data-cy-main-participant
@@ -67,7 +118,7 @@ export default function MainParticipantInfo({ participant, children }: MainParti
     >
       <div className={classes.infoContainer}>
         <h4 className={classes.identity}>
-          {participant.identity}
+          {participantName}
           {!isVideoEnabled && <VideocamOff />}
         </h4>
       </div>
