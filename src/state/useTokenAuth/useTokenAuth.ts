@@ -12,14 +12,18 @@ const getDecodedAccessToken = (token: string): any => {
 
 export const fetchUserParams = () => {
   let params = new URLSearchParams(window.location.search);
+  let identity = 0;
+  let roomName = '';
 
   const token = window.sessionStorage.getItem('token') || params.get('token') || '';
   const userType = window.sessionStorage.getItem('userType') || params.get('userType') || '';
 
-  const decoded = getDecodedAccessToken(token);
+  if (token !== '') {
+    const decoded = getDecodedAccessToken(token);
 
-  const identity = Number(decoded.grants.identity);
-  const roomName = decoded.grants.video.room;
+    identity = Number(decoded.grants.identity);
+    roomName = decoded.grants.video.room;
+  }
 
   for (var pair of params.entries()) {
     window.sessionStorage.setItem(pair[0], pair[1]);
@@ -48,7 +52,7 @@ export default function useTokenAuth() {
   useEffect(() => {
     const userInfo = fetchUserParams();
 
-    if (userInfo.token) {
+    if (userInfo.token !== '') {
       setUser({ ...userInfo } as any);
       history.replace(window.location.pathname);
     }

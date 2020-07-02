@@ -10,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Menu from './Menu/Menu';
 import { ReactComponent as VTOCLogo } from './logo.svg';
 
+import { LocalParticipant } from 'twilio-video';
 import { useAppState } from '../../state';
 import { useParams } from 'react-router-dom';
 import useRoomState from '../../hooks/useRoomState/useRoomState';
@@ -67,6 +68,36 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+async function logEndSession(id: number, room: string): Promise<any | { error: string }> {
+  const roomId = room;
+  const userId = id;
+
+  try {
+    const response = await fetch(
+      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=' +
+        roomId +
+        '&userId=' +
+        userId,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Base64.encode(
+            `${process.env.REACT_APP_API_USERNAME}:${process.env.REACT_APP_API_PASSWORD}`
+          )}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.code };
+    }
+    return await response.json();
+  } catch (err) {
+    return { error: err };
+  }
+}
+
 export default function MenuBar() {
   const classes = useStyles();
   const { URLRoomName } = useParams();
@@ -97,10 +128,11 @@ export default function MenuBar() {
 
   const handleSignOut = useCallback(() => {
     console.log('handle signout');
+    logEndSession(user!.identity, user!.roomName);
     room.disconnect?.();
     localTracks.forEach(track => track.stop());
     signOut?.();
-  }, [localTracks, room.disconnect, signOut]);
+  }, [user, localTracks, room.disconnect, signOut]);
 
   return (
     <AppBar className={classes.container} position="static">
