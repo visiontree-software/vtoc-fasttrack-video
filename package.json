@@ -3,6 +3,7 @@
 	"description": "Twilio Programmable Video application powered by AWS CodeStar using Express Js",
 	"version": "0.1.0",
 	"private": true,
+	"license": "Apache-2.0",
 	"dependencies": {
 		"@material-ui/core": "^4.9.1",
 		"@material-ui/icons": "^4.9.1",
@@ -36,7 +37,7 @@
 		"react-scripts": "^3.4.1",
 		"strip-color": "^0.1.0",
 		"twilio": "^3.39.3",
-		"twilio-video": "^2.5.0",
+		"twilio-video": "^2.6.0",
 		"typescript": "^3.8.3"
 	},
 	"devDependencies": {
