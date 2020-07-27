@@ -161,7 +161,7 @@ export default function MenuBar() {
           <Menu />
 
           <Button className={classes.exitButton} variant="contained" color="primary" onClick={handleSignOut}>
-            Exit Virtual Visit
+            {roomState === 'disconnected' ? 'Exit' : 'Exit Virtual Visit'}
           </Button>
         </div>
       </Toolbar>
