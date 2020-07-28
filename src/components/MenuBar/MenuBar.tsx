@@ -116,16 +116,6 @@ export default function MenuBar() {
     }
   }, [URLRoomName]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const token = window.sessionStorage.getItem('token');
-    //setRoomName('VTOC Video Room');
-    //setName('VTOC Patient');
-    if (token) {
-      connect(token);
-    }
-  };
-
   const handleSignOut = useCallback(() => {
     console.log('handle signout');
     logEndSession(user!.identity, user!.roomName);
@@ -138,22 +128,6 @@ export default function MenuBar() {
     <AppBar className={classes.container} position="static">
       <Toolbar className={classes.toolbar}>
         <VTOCLogo className={classes.vtocLogo} />
-        {roomState === 'disconnected' ? (
-          <form className={classes.form} onSubmit={handleSubmit}>
-            <Button
-              className={classes.joinButton}
-              type="submit"
-              color="primary"
-              variant="contained"
-              disabled={isAcquiringLocalTracks || isConnecting || isFetching}
-            >
-              Join Virtual Visit
-            </Button>
-            {(isConnecting || isFetching) && <CircularProgress className={classes.loadingSpinner} />}
-          </form>
-        ) : (
-          <h3>{roomName}</h3>
-        )}
         <div className={classes.rightButtonContainer}>
           {/* <FlipCameraButton /> */}
           <LocalAudioLevelIndicator />

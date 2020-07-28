@@ -16,7 +16,11 @@ const Container = styled('div')({
 });
 
 const Main = styled('main')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   overflow: 'hidden',
+  width: '100%',
 });
 
 export default function App() {
@@ -33,8 +37,14 @@ export default function App() {
     <Container style={{ height }}>
       <MenuBar />
       <Main>
-        {roomState === 'disconnected' ? <LocalVideoPreview /> : <Room />}
-        <Controls />
+        {roomState === 'disconnected' ? (
+          <LocalVideoPreview />
+        ) : (
+          <>
+            <Room />
+            <Controls />
+          </>
+        )}
       </Main>
       <ReconnectingNotification />
     </Container>

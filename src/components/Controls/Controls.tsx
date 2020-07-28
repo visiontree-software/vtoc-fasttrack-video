@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       right: '50%',
       transform: 'translate(50%, 30px)',
-      bottom: '50px',
+      bottom: '20px',
       zIndex: 1,
       transition: 'opacity 1.2s, transform 1.2s, visibility 0s 1.2s',
       opacity: 0,
@@ -45,6 +45,7 @@ export default function Controls() {
 
   return (
     <div className={clsx(classes.container, { showControls })}>
+      {showControls}
       <ToggleAudioButton disabled={isReconnecting} />
       <ToggleVideoButton disabled={isReconnecting} />
       {roomState !== 'disconnected' && (

@@ -111,9 +111,7 @@ export default function LoginPage() {
         <Paper className={classes.paper} elevation={6}>
           <VTOCLogo className={classes.vtocLogo} />
           {/* <img className={classes.videoLogo} src={videoLogo} alt="Video Logo"></img> */}
-          <Typography variant="subtitle1" color="primary">
-            FastTrack Video Virtual Visit
-          </Typography>
+          <Typography variant="subtitle1">Thank you for using VTOC FastTrack Video!</Typography>
 
           {process.env.REACT_APP_SET_AUTH === 'firebase' && (
             <Button variant="contained" className={classes.button} onClick={login} startIcon={<GoogleLogo />}>

@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AboutDialog from '../AboutDialog/AboutDialog';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import MenuContainer from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -23,9 +24,11 @@ export default function Menu() {
 
   return (
     <div ref={anchorRef}>
-      <IconButton onClick={() => setMenuOpen(state => !state)}>
-        <MoreIcon />
-      </IconButton>
+      <Tooltip title="Menu" placement="top" PopperProps={{ disablePortal: true }}>
+        <IconButton onClick={() => setMenuOpen(state => !state)}>
+          <MoreIcon />
+        </IconButton>
+      </Tooltip>
       <MenuContainer open={menuOpen} onClose={() => setMenuOpen(state => !state)} anchorEl={anchorRef.current}>
         {user?.displayName && <MenuItem disabled>{user.displayName}</MenuItem>}
         <MenuItem onClick={() => setAboutOpen(true)}>About</MenuItem>
