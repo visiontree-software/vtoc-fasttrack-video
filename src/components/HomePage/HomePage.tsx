@@ -34,13 +34,6 @@ const useStyles = makeStyles({
       paddingBottom: '1.5em',
     },
   },
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  reconnect: {
-    marginRight: '1em',
-  },
 });
 
 const theme = createMuiTheme({
@@ -57,9 +50,6 @@ const theme = createMuiTheme({
 
 export default function LoginPage() {
   const classes = useStyles();
-  const reconnectURL = `${window.origin}/virtual-visit?token=${window.sessionStorage.getItem(
-    'token'
-  )}&identity=${window.sessionStorage.getItem('identity')}&roomName=${window.sessionStorage.getItem('roomName')}`;
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,23 +58,8 @@ export default function LoginPage() {
           <VTOCLogo className={classes.vtocLogo} />
 
           <Typography variant="h6" color="textSecondary">
-            Thank you for using VTOC FastTrack Video!
+            Welcome to VTOC FastTrack Video!
           </Typography>
-
-          <div className={classes.actions}>
-            <Button variant="contained" color="primary" href={reconnectURL} className={classes.reconnect}>
-              Reconnect
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                window.sessionStorage.clear();
-                window.close();
-              }}
-            >
-              Close Window
-            </Button>
-          </div>
         </div>
       </Grid>
     </ThemeProvider>

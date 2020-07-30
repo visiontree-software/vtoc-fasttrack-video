@@ -20,7 +20,7 @@ export default function PrivateRoute({ children, ...rest }: RouteProps) {
         ) : (
           <Redirect
             to={{
-              pathname: '/thanks',
+              pathname: '/',
               state: { from: location },
             }}
           />

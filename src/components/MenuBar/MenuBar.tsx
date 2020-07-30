@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -96,6 +97,7 @@ async function logEndSession(userId: number, roomId: string): Promise<any | { er
 }
 
 export default function MenuBar() {
+  const history = useHistory();
   const classes = useStyles();
   const roomState = useRoomState();
   const { user, signOut } = useAppState();
@@ -109,8 +111,9 @@ export default function MenuBar() {
     room.disconnect?.();
     localTracks.forEach(track => track.stop());
     signOut?.();
+    history.push('/thanks');
     // window.close();
-  }, [roomState, room.disconnect, localTracks, signOut, user]);
+  }, [roomState, room.disconnect, localTracks, signOut, history, user]);
 
   return (
     <AppBar className={classes.container} position="static">

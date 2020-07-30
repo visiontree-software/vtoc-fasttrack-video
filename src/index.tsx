@@ -9,6 +9,7 @@ import AppStateProvider, { useAppState } from './state';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorDialog from './components/ErrorDialog/ErrorDialog';
 import generateConnectionOptions from './utils/generateConnectionOptions/generateConnectionOptions';
+import HomePage from './components/HomePage/HomePage';
 import ThanksPage from './components/ThanksPage/ThanksPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import theme from './theme';
@@ -36,14 +37,14 @@ ReactDOM.render(
     <Router>
       <AppStateProvider>
         <Switch>
-          <PrivateRoute exact path="/">
-            <VideoApp />
-          </PrivateRoute>
-          <PrivateRoute path="/room/:URLRoomName">
+          <PrivateRoute path="/virtual-visit">
             <VideoApp />
           </PrivateRoute>
           <Route path="/thanks">
             <ThanksPage />
+          </Route>
+          <Route exact path="/">
+            <HomePage />
           </Route>
           <Redirect to="/" />
         </Switch>

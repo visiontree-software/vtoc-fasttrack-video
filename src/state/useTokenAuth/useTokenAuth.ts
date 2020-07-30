@@ -55,6 +55,7 @@ export default function useTokenAuth() {
     if (userInfo.token !== '') {
       setUser({ ...userInfo } as any);
       history.replace(window.location.pathname);
+      //history.push('/virtual-visit');
     }
     setIsAuthReady(true);
   }, [history]);
