@@ -109,6 +109,7 @@ export default function MenuBar() {
     room.disconnect?.();
     localTracks.forEach(track => track.stop());
     signOut?.();
+    // window.close();
   }, [roomState, room.disconnect, localTracks, signOut, user]);
 
   return (

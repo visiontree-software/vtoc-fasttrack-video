@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { ReactComponent as GoogleLogo } from './google-logo.svg';
 import { ReactComponent as TwilioLogo } from './twilio-logo.svg';
-import { ReactComponent as VTOCLogo } from './logo.svg';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import videoLogo from './video-logo.png';
@@ -19,7 +18,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 const useStyles = makeStyles({
   container: {
     height: '100vh',
-    background: '#fff',
+    background: '#0D122B',
   },
   twilioLogo: {
     width: '55%',
@@ -28,11 +27,6 @@ const useStyles = makeStyles({
   videoLogo: {
     width: '25%',
     padding: '2.4em 0 2.1em',
-  },
-  vtocLogo: {
-    width: '55%',
-    display: 'block',
-    marginBottom: '1em',
   },
   paper: {
     display: 'flex',
@@ -64,12 +58,6 @@ const useStyles = makeStyles({
 const theme = createMuiTheme({
   palette: {
     type: 'light',
-    primary: {
-      main: '#2196F3',
-    },
-    secondary: {
-      main: '#4CAF50',
-    },
   },
 });
 
@@ -109,9 +97,8 @@ export default function LoginPage() {
     <ThemeProvider theme={theme}>
       <Grid container justify="center" alignItems="flex-start" className={classes.container}>
         <Paper className={classes.paper} elevation={6}>
-          <VTOCLogo className={classes.vtocLogo} />
-          {/* <img className={classes.videoLogo} src={videoLogo} alt="Video Logo"></img> */}
-          <Typography variant="subtitle1">Thank you for using VTOC FastTrack Video!</Typography>
+          <TwilioLogo className={classes.twilioLogo} />
+          <img className={classes.videoLogo} src={videoLogo} alt="Video Logo"></img>
 
           {process.env.REACT_APP_SET_AUTH === 'firebase' && (
             <Button variant="contained" className={classes.button} onClick={login} startIcon={<GoogleLogo />}>

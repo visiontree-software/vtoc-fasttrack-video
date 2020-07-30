@@ -66,7 +66,7 @@ export default function useTokenAuth() {
 
   const signOut = useCallback(() => {
     setUser(null);
-    window.sessionStorage.clear();
+    // window.sessionStorage.clear();
     return Promise.resolve();
   }, []);
 

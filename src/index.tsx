@@ -9,7 +9,7 @@ import AppStateProvider, { useAppState } from './state';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorDialog from './components/ErrorDialog/ErrorDialog';
 import generateConnectionOptions from './utils/generateConnectionOptions/generateConnectionOptions';
-import LoginPage from './components/LoginPage/LoginPage';
+import ThanksPage from './components/ThanksPage/ThanksPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import theme from './theme';
 import './types';
@@ -42,8 +42,8 @@ ReactDOM.render(
           <PrivateRoute path="/room/:URLRoomName">
             <VideoApp />
           </PrivateRoute>
-          <Route path="/login">
-            <LoginPage />
+          <Route path="/thanks">
+            <ThanksPage />
           </Route>
           <Redirect to="/" />
         </Switch>
