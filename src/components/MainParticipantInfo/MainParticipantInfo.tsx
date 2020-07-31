@@ -33,6 +33,7 @@ const useStyles = makeStyles({
     fontSize: '1.2em',
     color: '#fff',
     display: 'inline-flex',
+    borderRadius: '4px',
     '& svg': {
       marginLeft: '0.3em',
     },

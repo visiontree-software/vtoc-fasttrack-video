@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       color: '#fff',
+      borderRadius: '4px',
     },
     infoRow: {
       display: 'flex',

@@ -15,12 +15,16 @@ const Container = styled('div')({
   gridTemplateRows: 'auto 1fr',
 });
 
-const Main = styled('main')({
+const MainLocal = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   overflow: 'hidden',
   width: '100%',
+});
+
+const Main = styled('main')({
+  overflow: 'hidden',
 });
 
 export default function App() {
@@ -36,16 +40,16 @@ export default function App() {
   return (
     <Container style={{ height }}>
       <MenuBar />
-      <Main>
-        {roomState === 'disconnected' ? (
+      {roomState === 'disconnected' ? (
+        <MainLocal>
           <LocalVideoPreview />
-        ) : (
-          <>
-            <Room />
-            <Controls />
-          </>
-        )}
-      </Main>
+        </MainLocal>
+      ) : (
+        <Main>
+          <Room />
+          <Controls />
+        </Main>
+      )}
       <ReconnectingNotification />
     </Container>
   );
