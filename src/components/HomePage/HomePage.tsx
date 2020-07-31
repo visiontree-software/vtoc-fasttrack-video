@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { useLocation, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   container: {
@@ -31,7 +30,6 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     '& h6': {
       fontWeight: '400',
-      paddingBottom: '1.5em',
     },
   },
 });
@@ -58,7 +56,7 @@ export default function LoginPage() {
           <VTOCLogo className={classes.vtocLogo} />
 
           <Typography variant="h6" color="textSecondary">
-            Welcome to VTOC FastTrack Video!
+            VTOC FastTrack Video
           </Typography>
         </div>
       </Grid>

@@ -38,9 +38,7 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
-  reconnect: {
-    marginRight: '1em',
-  },
+  reconnect: {},
 });
 
 const theme = createMuiTheme({
@@ -57,6 +55,10 @@ const theme = createMuiTheme({
 
 export default function LoginPage() {
   const classes = useStyles();
+  const reconnectAble =
+    window.sessionStorage.getItem('token') &&
+    window.sessionStorage.getItem('identity') &&
+    window.sessionStorage.getItem('roomName');
   const reconnectURL = `${window.origin}/virtual-visit?token=${window.sessionStorage.getItem(
     'token'
   )}&identity=${window.sessionStorage.getItem('identity')}&roomName=${window.sessionStorage.getItem('roomName')}`;
@@ -68,22 +70,15 @@ export default function LoginPage() {
           <VTOCLogo className={classes.vtocLogo} />
 
           <Typography variant="h6" color="textSecondary">
-            Thank you for using VTOC FastTrack Video!
+            You have left the virtual visit.
           </Typography>
 
           <div className={classes.actions}>
-            <Button variant="contained" color="primary" href={reconnectURL} className={classes.reconnect}>
-              Reconnect
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                window.sessionStorage.clear();
-                window.close();
-              }}
-            >
-              Close Window
-            </Button>
+            {reconnectAble && (
+              <Button variant="contained" color="primary" href={reconnectURL} className={classes.reconnect}>
+                Reconnect
+              </Button>
+            )}
           </div>
         </div>
       </Grid>
