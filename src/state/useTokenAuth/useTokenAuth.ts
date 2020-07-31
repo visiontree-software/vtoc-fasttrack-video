@@ -12,8 +12,8 @@ const getDecodedAccessToken = (token: string): any => {
 
 export const fetchUserParams = () => {
   let params = new URLSearchParams(window.location.search);
-  let identity = 0;
-  let roomName = '';
+  let identity;
+  let roomName;
 
   const token = window.sessionStorage.getItem('token') || params.get('token') || '';
   const userType = window.sessionStorage.getItem('userType') || params.get('userType') || '';
@@ -21,8 +21,11 @@ export const fetchUserParams = () => {
   if (token !== '') {
     const decoded = getDecodedAccessToken(token);
 
-    identity = Number(decoded.grants.identity);
+    identity = decoded.grants.identity;
     roomName = decoded.grants.video.room;
+
+    window.sessionStorage.setItem('identity', identity);
+    window.sessionStorage.setItem('roomName', roomName);
   }
 
   for (var pair of params.entries()) {
