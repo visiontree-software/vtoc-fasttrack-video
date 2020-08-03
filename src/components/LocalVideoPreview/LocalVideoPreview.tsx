@@ -4,12 +4,7 @@ import VideoTrack from '../VideoTrack/VideoTrack';
 import { useAppState } from '../../state';
 import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Controls from '../Controls/Controls';
@@ -82,6 +77,9 @@ export default function LocalVideoPreview() {
   const { user, isFetching } = useAppState();
   const { isConnecting, connect, isAcquiringLocalTracks, localTracks } = useVideoContext();
   const classes = useStyles();
+  const userIsPatient = user?.userType !== 'patient';
+
+  console.log('User:', user);
 
   const videoTrack = localTracks.find(track => track.name.includes('camera')) as LocalVideoTrack;
 
@@ -109,9 +107,15 @@ export default function LocalVideoPreview() {
               <Typography variant="h5" gutterBottom>
                 VTOC FastTrack Video
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                Please click the "Join Virtual Visit" button below to connect with your medteam provider.
-              </Typography>
+              {userIsPatient ? (
+                <Typography variant="body1" gutterBottom>
+                  Please click the "Join Virtual Visit" button below to connect with your physician.
+                </Typography>
+              ) : (
+                <Typography variant="body1" gutterBottom>
+                  Please click the "Join Virtual Visit" button below to connect with your patient.
+                </Typography>
+              )}
               <form onSubmit={handleSubmit}>
                 <Button
                   className={classes.joinButton}
