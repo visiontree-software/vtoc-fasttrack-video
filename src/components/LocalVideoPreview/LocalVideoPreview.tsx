@@ -128,5 +128,7 @@ export default function LocalVideoPreview() {
         </Grid>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <Controls />
+  );
 }
