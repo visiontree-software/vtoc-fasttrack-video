@@ -77,7 +77,7 @@ export default function LocalVideoPreview() {
   const { user, isFetching } = useAppState();
   const { isConnecting, connect, isAcquiringLocalTracks, localTracks } = useVideoContext();
   const classes = useStyles();
-  const userIsPatient = user?.userType !== 'patient';
+  const userIsPatient = user?.userType === 'patient';
 
   const videoTrack = localTracks.find(track => track.name.includes('camera')) as LocalVideoTrack;
 
@@ -92,13 +92,12 @@ export default function LocalVideoPreview() {
     }
   };
 
-  return videoTrack ? (
+  return (
     <div className={classes.root}>
       <div className={classes.container}>
         <Grid container spacing={2} className={classes.innerContainer}>
           <Grid item xs={12} sm={6} lg={7} className={classes.videoContainer}>
-            <VideoTrack track={videoTrack} isLocal />
-            <Controls />
+            {videoTrack && <VideoTrack track={videoTrack} isLocal />}
           </Grid>
           <Grid item xs={12} sm={6} lg={5} className={classes.videoInformation}>
             <div>
@@ -107,11 +106,11 @@ export default function LocalVideoPreview() {
               </Typography>
               {userIsPatient ? (
                 <Typography variant="body1" gutterBottom>
-                  Please click the "Join Virtual Visit" button below to connect with your physician.
+                  Please click the "Join Virtual Visit" button below to connect with your patient.
                 </Typography>
               ) : (
                 <Typography variant="body1" gutterBottom>
-                  Please click the "Join Virtual Visit" button below to connect with your patient.
+                  Please click the "Join Virtual Visit" button below to connect with your physician.
                 </Typography>
               )}
               <form onSubmit={handleSubmit}>
@@ -130,7 +129,5 @@ export default function LocalVideoPreview() {
         </Grid>
       </div>
     </div>
-  ) : (
-    <Controls />
   );
 }

@@ -50,6 +50,7 @@ export default function App() {
           <Controls />
         </Main>
       )}
+      {roomState === 'disconnected' && <Controls />}
       <ReconnectingNotification />
     </Container>
   );
