@@ -106,7 +106,7 @@ export default function LocalVideoPreview() {
               </Typography>
               {userIsPatient ? (
                 <Typography variant="body1" gutterBottom>
-                  Please click the "Join Virtual Visit" button below to connect with your physician.
+                  Please click the "Join Virtual Visit" button below to connect with your careteam.
                 </Typography>
               ) : (
                 <Typography variant="body1" gutterBottom>
@@ -121,7 +121,7 @@ export default function LocalVideoPreview() {
                   variant="contained"
                   disabled={isAcquiringLocalTracks || isConnecting || isFetching}
                 >
-                  Join Virtual Visit
+                  Join Now
                 </Button>
               </form>
             </div>
