@@ -137,8 +137,8 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
   const [participantName, setUsername] = useState('');
 
   useEffect(() => {
-    const userId = user!.identity;
-    const participantId = parseInt(participant.identity, 10);
+    const userId = user!.identity.toString();
+    const participantId = participant.identity;
 
     if (userId !== participantId) {
       fetchPartipantName(participant.identity, user!.roomName).then(result => {
