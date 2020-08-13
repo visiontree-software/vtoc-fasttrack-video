@@ -106,11 +106,11 @@ export default function LocalVideoPreview() {
               </Typography>
               {userIsPatient ? (
                 <Typography variant="body1" gutterBottom>
-                  Please click the "Join Virtual Visit" button below to connect with your patient.
+                  Please click the "Join Virtual Visit" button below to connect with your physician.
                 </Typography>
               ) : (
                 <Typography variant="body1" gutterBottom>
-                  Please click the "Join Virtual Visit" button below to connect with your physician.
+                  Please click the "Join Virtual Visit" button below to connect with your patient.
                 </Typography>
               )}
               <form onSubmit={handleSubmit}>
