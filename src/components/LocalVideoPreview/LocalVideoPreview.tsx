@@ -80,14 +80,13 @@ export default function LocalVideoPreview() {
   const userIsPatient = user?.userType === 'patient';
 
   const videoTrack = localTracks.find(track => track.name.includes('camera')) as LocalVideoTrack;
+  console.log({ user });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const token = window.sessionStorage.getItem('token');
-    //setRoomName('VTOC Video Room');
-    //setName('VTOC Patient');
-    if (token) {
-      connect(token);
+
+    if (user!.token) {
+      connect(user!.token);
       logStartSession(user!.identity, user!.roomName);
     }
   };
