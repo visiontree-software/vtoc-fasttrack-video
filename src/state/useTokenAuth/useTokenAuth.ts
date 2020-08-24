@@ -15,8 +15,8 @@ export const fetchUserParams = () => {
   let identity;
   let roomName;
 
-  const token = window.sessionStorage.getItem('token') || params.get('token') || '';
-  const userType = window.sessionStorage.getItem('userType') || params.get('userType') || '';
+  const token = params.get('token') || window.sessionStorage.getItem('token') || '';
+  const userType = params.get('userType') || window.sessionStorage.getItem('userType') || '';
 
   if (token !== '') {
     const decoded = getDecodedAccessToken(token);
