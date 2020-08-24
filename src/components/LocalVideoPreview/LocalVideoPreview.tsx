@@ -80,7 +80,6 @@ export default function LocalVideoPreview() {
   const userIsPatient = user?.userType === 'patient';
 
   const videoTrack = localTracks.find(track => track.name.includes('camera')) as LocalVideoTrack;
-  console.log({ user });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
