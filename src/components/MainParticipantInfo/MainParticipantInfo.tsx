@@ -58,7 +58,7 @@ async function fetchPartipantName(id: string, room: string): Promise<any | { err
 
   try {
     const response = await fetch(
-      'https://preview2.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
         roomId +
         '&userId=' +
         userId,
@@ -106,7 +106,7 @@ export default function MainParticipantInfo({ participant, children }: MainParti
 
     if (userId !== participantId) {
       fetchPartipantName(participant.identity, user!.roomName).then(result => {
-        setUsername(result.firstName + ' ' + result.lastName);
+        setUsername(`${result.firstName} ${result.lastName}`);
       });
     } else {
       setUsername('You');
