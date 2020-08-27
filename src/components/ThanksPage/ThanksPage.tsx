@@ -53,7 +53,7 @@ const theme = createMuiTheme({
   },
 });
 
-export default function LoginPage() {
+export default function ThanksPage() {
   const classes = useStyles();
   const reconnectAble =
     window.sessionStorage.getItem('token') &&
