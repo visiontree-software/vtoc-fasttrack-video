@@ -19,7 +19,7 @@ const MainLocal = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  overflow: 'hidden',
+  /*overflow: 'hidden',*/
   width: '100%',
 });
 
