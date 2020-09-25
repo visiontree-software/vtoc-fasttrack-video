@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 async function logStartSession(userId: number, roomId: string): Promise<any | { error: string }> {
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logStartSession&roomId=' +
+      'https://prod-staging.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logStartSession&roomId=' +
         roomId +
         '&userId=' +
         userId,

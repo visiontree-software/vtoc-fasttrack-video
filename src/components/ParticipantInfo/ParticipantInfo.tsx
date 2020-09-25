@@ -91,7 +91,7 @@ async function fetchPartipantName(id: string, room: string): Promise<any | { err
 
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+      'https://prod-staging.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
         roomId +
         '&userId=' +
         userId,
