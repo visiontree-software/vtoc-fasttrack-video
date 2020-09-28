@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
 async function logEndSession(userId: number, roomId: string): Promise<any | { error: string }> {
   try {
     const response = await fetch(
-      'https://prod-staging.optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=' +
+      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=' +
         roomId +
         '&userId=' +
         userId,
