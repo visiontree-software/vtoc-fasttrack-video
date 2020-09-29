@@ -85,13 +85,13 @@ interface ParticipantInfoProps {
   isSelected: boolean;
 }
 
-async function fetchPartipantName(id: string, room: string): Promise<any | { error: string }> {
+async function fetchPartipantName(vtocUrl: string, id: string, room: string): Promise<any | { error: string }> {
   const roomId = room;
   const userId = parseInt(id, 10);
 
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=' +
+      `${vtocUrl}physician/Application/controllers/VideoControllerRemote.cfc?method=getUserName&roomId=` +
         roomId +
         '&userId=' +
         userId,
@@ -116,7 +116,7 @@ async function fetchPartipantName(id: string, room: string): Promise<any | { err
 }
 
 export default function ParticipantInfo({ participant, onClick, isSelected, children }: ParticipantInfoProps) {
-  const { user } = useAppState();
+  const { user, vtocUrl } = useAppState();
 
   const publications = usePublications(participant);
 
@@ -141,13 +141,13 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
     const participantId = participant.identity;
 
     if (userId !== participantId) {
-      fetchPartipantName(participant.identity, user!.roomName).then(result => {
+      fetchPartipantName(vtocUrl, participant.identity, user!.roomName).then(result => {
         setUsername(result.firstName + ' ' + result.lastName);
       });
     } else {
       setUsername('You');
     }
-  }, [participant, user]);
+  }, [participant, user, vtocUrl]);
 
   return (
     <div

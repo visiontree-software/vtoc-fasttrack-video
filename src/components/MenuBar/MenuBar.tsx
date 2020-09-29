@@ -69,10 +69,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-async function logEndSession(userId: number, roomId: string): Promise<any | { error: string }> {
+async function logEndSession(vtocUrl: string, userId: number, roomId: string): Promise<any | { error: string }> {
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=' +
+      `${vtocUrl}physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=` +
         roomId +
         '&userId=' +
         userId,
@@ -100,20 +100,20 @@ export default function MenuBar() {
   const history = useHistory();
   const classes = useStyles();
   const roomState = useRoomState();
-  const { user, signOut } = useAppState();
+  const { user, vtocUrl, signOut } = useAppState();
   const { room, localTracks } = useVideoContext();
 
   const handleSignOut = useCallback(() => {
     console.log('handle signout');
     if (roomState === 'connected') {
-      logEndSession(user!.identity, user!.roomName);
+      logEndSession(vtocUrl, user!.identity, user!.roomName);
     }
     room.disconnect?.();
     localTracks.forEach(track => track.stop());
     signOut?.();
     history.push('/thanks');
     // window.close();
-  }, [roomState, room.disconnect, localTracks, signOut, history, user]);
+  }, [roomState, room.disconnect, localTracks, signOut, history, vtocUrl, user]);
 
   return (
     <AppBar className={classes.container} position="static">

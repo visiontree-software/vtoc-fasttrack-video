@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-async function logEndSession(userId: number, roomId: string): Promise<any | { error: string }> {
+async function logEndSession(vtocUrl: string, userId: number, roomId: string): Promise<any | { error: string }> {
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=' +
+      `${vtocUrl}physician/Application/controllers/VideoControllerRemote.cfc?method=logEndSession&roomId=` +
         roomId +
         '&userId=' +
         userId,
@@ -46,12 +46,12 @@ async function logEndSession(userId: number, roomId: string): Promise<any | { er
 export default function EndCallButton() {
   const classes = useStyles();
   const { room } = useVideoContext();
-  const { user } = useAppState();
+  const { user, vtocUrl } = useAppState();
 
   const logEndCall = useCallback(() => {
     console.log('handle end call');
-    logEndSession(user!.identity, user!.roomName);
-  }, [user]);
+    logEndSession(vtocUrl, user!.identity, user!.roomName);
+  }, [user, vtocUrl]);
 
   return (
     <Tooltip

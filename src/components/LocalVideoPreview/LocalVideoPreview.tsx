@@ -46,10 +46,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-async function logStartSession(userId: number, roomId: string): Promise<any | { error: string }> {
+async function logStartSession(vtocUrl: string, userId: number, roomId: string): Promise<any | { error: string }> {
   try {
     const response = await fetch(
-      'https://optimalcare.com/physician/Application/controllers/VideoControllerRemote.cfc?method=logStartSession&roomId=' +
+      `${vtocUrl}physician/Application/controllers/VideoControllerRemote.cfc?method=logStartSession&roomId=` +
         roomId +
         '&userId=' +
         userId,
@@ -74,7 +74,7 @@ async function logStartSession(userId: number, roomId: string): Promise<any | { 
 }
 
 export default function LocalVideoPreview() {
-  const { user, isFetching } = useAppState();
+  const { user, isFetching, vtocUrl } = useAppState();
   const { isConnecting, connect, isAcquiringLocalTracks, localTracks } = useVideoContext();
   const classes = useStyles();
   const userIsPatient = user?.userType === 'patient';
@@ -86,7 +86,7 @@ export default function LocalVideoPreview() {
 
     if (user!.token) {
       connect(user!.token);
-      logStartSession(user!.identity, user!.roomName);
+      logStartSession(vtocUrl, user!.identity, user!.roomName);
     }
   };
 

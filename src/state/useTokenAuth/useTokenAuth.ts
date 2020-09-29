@@ -17,6 +17,8 @@ export const fetchUserParams = () => {
 
   const token = params.get('token') || window.sessionStorage.getItem('token') || '';
   const userType = params.get('userType') || window.sessionStorage.getItem('userType') || '';
+  const region = params.get('region') || window.sessionStorage.getItem('region') || '';
+  const env = params.get('env') || window.sessionStorage.getItem('env') || '';
 
   if (token !== '') {
     const decoded = getDecodedAccessToken(token);
@@ -32,11 +34,12 @@ export const fetchUserParams = () => {
     window.sessionStorage.setItem(pair[0], pair[1]);
   }
 
-  return { token, identity, roomName, userType };
+  return { token, identity, roomName, userType, region, env };
 };
 
 export default function useTokenAuth() {
   const history = useHistory();
+  const [vtocUrl, setVtocUrl] = useState('https://optimalcare.com/');
 
   const [user, setUser] = useState<{
     token: string;
@@ -54,6 +57,10 @@ export default function useTokenAuth() {
 
   useEffect(() => {
     const userInfo = fetchUserParams();
+    const vtocUrlToUse = `REACT_APP_VTOC_${userInfo.region}_${userInfo.env}_URL`;
+
+    // set vtoc api url to use based on region/env
+    setVtocUrl(`${process.env[vtocUrlToUse]}`);
 
     if (userInfo.token !== '') {
       setUser({ ...userInfo } as any);
@@ -61,7 +68,7 @@ export default function useTokenAuth() {
       //history.push('/virtual-visit');
     }
     setIsAuthReady(true);
-  }, [history]);
+  }, [vtocUrl, history]);
 
   const signIn = useCallback((token: string) => {
     window.sessionStorage.setItem('token', token);
@@ -74,5 +81,5 @@ export default function useTokenAuth() {
     return Promise.resolve();
   }, []);
 
-  return { user, isAuthReady, getToken, signIn, signOut };
+  return { user, isAuthReady, getToken, signIn, signOut, vtocUrl };
 }
