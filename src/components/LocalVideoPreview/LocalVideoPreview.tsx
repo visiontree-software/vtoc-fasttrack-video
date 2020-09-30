@@ -47,8 +47,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 async function logStartSession(vtocUrl: string, userId: number, roomId: string): Promise<any | { error: string }> {
-  console.log('logStartSession vtocUrl:', vtocUrl);
-
   try {
     const response = await fetch(
       `${vtocUrl}physician/Application/controllers/VideoControllerRemote.cfc?method=logStartSession&roomId=` +
