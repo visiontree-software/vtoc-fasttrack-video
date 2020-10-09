@@ -83,7 +83,7 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
   return (
     <>
       <Typography variant="h6" className={classNames({ [classes.gutterBottom]: true, [classes.title]: true })}>
-        Click the "Join Now" button below to connect with your {userIsPatient ? 'careteam' : 'patient'}.
+        Click the "Join Now" button below to connect with your {userIsPatient ? 'care team' : 'patient'}.
       </Typography>
 
       <Grid container justify="center">
