@@ -6,19 +6,20 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { LocalAudioTrack, LocalVideoTrack, Participant, RemoteAudioTrack, RemoteVideoTrack } from 'twilio-video';
 
 import AudioLevelIndicator from '../AudioLevelIndicator/AudioLevelIndicator';
-import BandwidthWarning from '../BandwidthWarning/BandwidthWarning';
-import NetworkQualityLevel from '../NewtorkQualityLevel/NetworkQualityLevel';
-import ParticipantConnectionIndicator from './ParticipantConnectionIndicator/ParticipantConnectionIndicator';
+import AvatarIcon from '../../icons/AvatarIcon';
+import NetworkQualityLevel from '../NetworkQualityLevel/NetworkQualityLevel';
 import PinIcon from './PinIcon/PinIcon';
-import ScreenShare from '@material-ui/icons/ScreenShare';
-import VideocamOff from '@material-ui/icons/VideocamOff';
+import ScreenShareIcon from '../../icons/ScreenShareIcon';
+import Typography from '@material-ui/core/Typography';
 
-import useParticipantNetworkQualityLevel from '../../hooks/useParticipantNetworkQualityLevel/useParticipantNetworkQualityLevel';
-import usePublications from '../../hooks/usePublications/usePublications';
 import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackSwitchedOff';
+import usePublications from '../../hooks/usePublications/usePublications';
 import useTrack from '../../hooks/useTrack/useTrack';
+import useParticipantIsReconnecting from '../../hooks/useParticipantIsReconnecting/useParticipantIsReconnecting';
 
 import { useAppState } from '../../state';
+
+const BORDER_SIZE = 2;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,54 +27,117 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
-      height: `${(theme.sidebarWidth * 9) / 16}px`,
+      height: 0,
       overflow: 'hidden',
-      cursor: 'pointer',
+      marginBottom: '2em',
       '& video': {
         filter: 'none',
+        objectFit: 'contain !important',
       },
-      '& svg': {
-        stroke: 'black',
-        strokeWidth: '0.8px',
-      },
-      [theme.breakpoints.down('xs')]: {
+      borderRadius: '4px',
+      border: `${BORDER_SIZE}px solid rgb(245, 248, 255)`,
+      paddingTop: `calc(${(9 / 16) * 100}% - ${BORDER_SIZE}px)`,
+      background: 'black',
+      [theme.breakpoints.down('sm')]: {
         height: theme.sidebarMobileHeight,
         width: `${(theme.sidebarMobileHeight * 16) / 9}px`,
-        marginRight: '3px',
+        marginRight: '8px',
+        marginBottom: '0',
         fontSize: '10px',
+        paddingTop: `${theme.sidebarMobileHeight - 2}px`,
       },
     },
-    isVideoSwitchedOff: {
-      '& video': {
-        filter: 'blur(4px) grayscale(1) brightness(0.5)',
-      },
+    innerContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
     },
     infoContainer: {
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 2,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
       height: '100%',
-      padding: '0.4em',
       width: '100%',
       background: 'transparent',
+      top: 0,
     },
-    hideVideo: {
+    avatarContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       background: 'black',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: 1,
+      [theme.breakpoints.down('sm')]: {
+        '& svg': {
+          transform: 'scale(0.7)',
+        },
+      },
+    },
+    reconnectingContainer: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'rgba(40, 42, 43, 0.75)',
+      zIndex: 1,
+    },
+    screenShareIconContainer: {
+      background: 'rgba(0, 0, 0, 0.5)',
+      padding: '0.18em 0.3em',
+      marginRight: '0.3em',
+      display: 'flex',
+      '& path': {
+        fill: 'white',
+      },
     },
     identity: {
-      background: 'rgba(0, 0, 0, 0.7)',
-      padding: '0.1em 0.3em',
+      background: 'rgba(0, 0, 0, 0.5)',
+      padding: '0.18em 0.3em',
       margin: 0,
       display: 'flex',
       alignItems: 'center',
       color: '#fff',
       borderRadius: '4px',
     },
-    infoRow: {
+    infoRowBottom: {
       display: 'flex',
       justifyContent: 'space-between',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+    },
+    networkQualityContainer: {
+      width: '28px',
+      height: '28px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'rgba(0, 0, 0, 0.5)',
+    },
+    typeography: {
+      color: 'white',
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '0.75rem',
+      },
+    },
+    hideParticipant: {
+      display: 'none',
+    },
+    cursorPointer: {
+      cursor: 'pointer',
     },
   })
 );
@@ -81,8 +145,10 @@ const useStyles = makeStyles((theme: Theme) =>
 interface ParticipantInfoProps {
   participant: Participant;
   children: React.ReactNode;
-  onClick: () => void;
-  isSelected: boolean;
+  onClick?: () => void;
+  isSelected?: boolean;
+  isLocalParticipant?: boolean;
+  hideParticipant?: boolean;
 }
 
 async function fetchPartipantName(vtocUrl: string, id: string, room: string): Promise<any | { error: string }> {
@@ -115,22 +181,28 @@ async function fetchPartipantName(vtocUrl: string, id: string, room: string): Pr
   }
 }
 
-export default function ParticipantInfo({ participant, onClick, isSelected, children }: ParticipantInfoProps) {
+export default function ParticipantInfo({
+  participant,
+  onClick,
+  isSelected,
+  children,
+  isLocalParticipant,
+  hideParticipant,
+}: ParticipantInfoProps) {
   const { user, vtocUrl } = useAppState();
-
   const publications = usePublications(participant);
 
   const audioPublication = publications.find(p => p.kind === 'audio');
   const videoPublication = publications.find(p => p.trackName.includes('camera'));
 
-  const networkQualityLevel = useParticipantNetworkQualityLevel(participant);
   const isVideoEnabled = Boolean(videoPublication);
   const isScreenShareEnabled = publications.find(p => p.trackName.includes('screen'));
 
   const videoTrack = useTrack(videoPublication);
   const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack as LocalVideoTrack | RemoteVideoTrack);
 
-  const audioTrack = useTrack(audioPublication) as LocalAudioTrack | RemoteAudioTrack;
+  const audioTrack = useTrack(audioPublication) as LocalAudioTrack | RemoteAudioTrack | undefined;
+  const isParticipantReconnecting = useParticipantIsReconnecting(participant);
 
   const classes = useStyles();
 
@@ -144,36 +216,53 @@ export default function ParticipantInfo({ participant, onClick, isSelected, chil
       fetchPartipantName(vtocUrl, participant.identity, user!.roomName).then(result => {
         setUsername(result.firstName + ' ' + result.lastName);
       });
-    } else {
-      setUsername('You');
     }
   }, [participant, user, vtocUrl]);
 
   return (
     <div
       className={clsx(classes.container, {
-        [classes.isVideoSwitchedOff]: isVideoSwitchedOff,
+        [classes.hideParticipant]: hideParticipant,
+        [classes.cursorPointer]: Boolean(onClick),
       })}
       onClick={onClick}
       data-cy-participant={participant.identity}
     >
-      <div className={clsx(classes.infoContainer, { [classes.hideVideo]: !isVideoEnabled })}>
-        <div className={classes.infoRow}>
-          <h4 className={classes.identity}>
-            <ParticipantConnectionIndicator participant={participant} />
-            {participantName}
-          </h4>
-          <NetworkQualityLevel qualityLevel={networkQualityLevel} />
+      <div className={classes.infoContainer}>
+        <div className={classes.networkQualityContainer}>
+          <NetworkQualityLevel participant={participant} />
         </div>
-        <div>
-          <AudioLevelIndicator audioTrack={audioTrack} background="white" />
-          {!isVideoEnabled && <VideocamOff />}
-          {isScreenShareEnabled && <ScreenShare />}
-          {isSelected && <PinIcon />}
+        <div className={classes.infoRowBottom}>
+          {isScreenShareEnabled && (
+            <span className={classes.screenShareIconContainer}>
+              <ScreenShareIcon />
+            </span>
+          )}
+          <span className={classes.identity}>
+            <AudioLevelIndicator audioTrack={audioTrack} />
+            <Typography variant="body1" className={classes.typeography} component="span">
+              {!isLocalParticipant && participantName}
+              {isLocalParticipant && '(You)'}
+            </Typography>
+          </span>
         </div>
+        <div>{isSelected && <PinIcon />}</div>
       </div>
-      {isVideoSwitchedOff && <BandwidthWarning />}
-      {children}
+      <div className={classes.innerContainer}>
+        {(!isVideoEnabled || isVideoSwitchedOff) && (
+          <div className={classes.avatarContainer}>
+            <AvatarIcon />
+          </div>
+        )}
+        {isParticipantReconnecting && (
+          <div className={classes.reconnectingContainer}>
+            <Typography variant="body1" className={classes.typeography}>
+              Reconnecting...
+            </Typography>
+          </div>
+        )}
+        {children}
+      </div>
     </div>
   );
 }

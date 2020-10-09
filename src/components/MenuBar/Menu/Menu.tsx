@@ -1,39 +1,53 @@
 import React, { useState, useRef } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import AboutDialog from '../../AboutDialog/AboutDialog';
 import Button from '@material-ui/core/Button';
-import AboutDialog from '../AboutDialog/AboutDialog';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDialog';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MenuContainer from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import SettingsDialog from '../SettingsDialog/SettingsDialog';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import Typography from '@material-ui/core/Typography';
+import { Theme, useMediaQuery } from '@material-ui/core';
 
-import { useAppState } from '../../../state';
-import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
-
-export default function Menu() {
-  const { user } = useAppState();
-
+export default function Menu(props: { buttonClassName?: string }) {
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [aboutOpen, setAboutOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const anchorRef = useRef<HTMLDivElement>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div ref={anchorRef}>
-      <Tooltip title="Menu" placement="top" PopperProps={{ disablePortal: true }}>
-        <IconButton onClick={() => setMenuOpen(state => !state)}>
+    <>
+      <Button onClick={() => setMenuOpen(isOpen => !isOpen)} ref={anchorRef} className={props.buttonClassName}>
+        {isMobile ? (
           <MoreIcon />
-        </IconButton>
-      </Tooltip>
-      <MenuContainer open={menuOpen} onClose={() => setMenuOpen(state => !state)} anchorEl={anchorRef.current}>
-        {user?.displayName && <MenuItem disabled>{user.displayName}</MenuItem>}
-        <MenuItem onClick={() => setAboutOpen(true)}>About</MenuItem>
-        <MenuItem onClick={() => setSettingsOpen(true)}>Settings</MenuItem>
-        {/* {user && <MenuItem onClick={handleSignOut}>Logout</MenuItem>} */}
+        ) : (
+          <>
+            Settings
+            <ExpandMoreIcon />
+          </>
+        )}
+      </Button>
+      <MenuContainer
+        open={menuOpen}
+        onClose={() => setMenuOpen(isOpen => !isOpen)}
+        anchorEl={anchorRef.current}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: isMobile ? -55 : 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <MenuItem onClick={() => setAboutOpen(true)}>
+          <Typography variant="body1">About</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => setSettingsOpen(true)}>
+          <Typography variant="body1">Audio and Video Settings</Typography>
+        </MenuItem>
       </MenuContainer>
       <AboutDialog
         open={aboutOpen}
@@ -42,13 +56,13 @@ export default function Menu() {
           setMenuOpen(false);
         }}
       />
-      <SettingsDialog
+      <DeviceSelectionDialog
         open={settingsOpen}
         onClose={() => {
           setSettingsOpen(false);
           setMenuOpen(false);
         }}
       />
-    </div>
+    </>
   );
 }
