@@ -12,8 +12,6 @@ jest.mock('react-router-dom', () => {
 });
 jest.mock('../../state');
 jest.mock('./google-logo.svg', () => ({ ReactComponent: () => null }));
-jest.mock('./twilio-logo.svg', () => ({ ReactComponent: () => null }));
-jest.mock('./video-logo.png', () => ({ ReactComponent: () => null }));
 
 const mockUseAppState = useAppState as jest.Mock<any>;
 const mockUseLocation = useLocation as jest.Mock<any>;
@@ -21,6 +19,7 @@ const mockUseHistory = useHistory as jest.Mock<any>;
 
 const mockReplace = jest.fn();
 mockUseHistory.mockImplementation(() => ({ replace: mockReplace }));
+mockUseLocation.mockImplementation(() => ({ pathname: '/login' }));
 
 describe('the LoginPage component', () => {
   beforeEach(jest.clearAllMocks);
@@ -41,7 +40,7 @@ describe('the LoginPage component', () => {
       expect(getByText('Sign in with Google')).toBeTruthy();
     });
 
-    it('should redirect the user to "/" after signIn when there is no previous location', (done) => {
+    it('should redirect the user to "/" after signIn when there is no previous location', done => {
       process.env.REACT_APP_SET_AUTH = 'firebase';
       mockUseAppState.mockImplementation(() => ({ user: null, signIn: () => Promise.resolve(), isAuthReady: true }));
       const { getByText } = render(<LoginPage />);
@@ -52,7 +51,7 @@ describe('the LoginPage component', () => {
       });
     });
 
-    it('should redirect the user to their previous location after signIn', (done) => {
+    it('should redirect the user to their previous location after signIn', done => {
       process.env.REACT_APP_SET_AUTH = 'firebase';
       mockUseLocation.mockImplementation(() => ({ state: { from: { pathname: '/room/test' } } }));
       mockUseAppState.mockImplementation(() => ({ user: null, signIn: () => Promise.resolve(), isAuthReady: true }));
@@ -74,7 +73,7 @@ describe('the LoginPage component', () => {
   });
 
   describe('with passcode auth enabled', () => {
-    it('should call sign in with the supplied passcode', (done) => {
+    it('should call sign in with the supplied passcode', done => {
       const mockSignin = jest.fn(() => Promise.resolve());
       process.env.REACT_APP_SET_AUTH = 'passcode';
       mockUseAppState.mockImplementation(() => ({ user: null, signIn: mockSignin, isAuthReady: true }));
