@@ -18,7 +18,7 @@ export default function PreJoinScreens() {
   const { user } = useAppState();
   const { getAudioAndVideoTracks } = useVideoContext();
   const { URLRoomName } = useParams();
-  const [step, setStep] = useState(Steps.roomNameStep);
+  const [step, setStep] = useState(Steps.deviceSelectionStep);
 
   const [name, setName] = useState<string>(user?.displayName || '');
   const [roomName, setRoomName] = useState<string>('');
@@ -26,12 +26,15 @@ export default function PreJoinScreens() {
   const [mediaError, setMediaError] = useState<Error>();
 
   useEffect(() => {
-    if (URLRoomName) {
-      setRoomName(URLRoomName);
-      if (user?.displayName) {
-        setStep(Steps.deviceSelectionStep);
-      }
-    }
+    // force user to device selection/join now step
+    setStep(Steps.deviceSelectionStep);
+
+    // if (URLRoomName) {
+    // 	setRoomName(URLRoomName);
+    // 	if (user?.displayName) {
+    // 		setStep(Steps.deviceSelectionStep);
+    // 	}
+    // }
   }, [user, URLRoomName]);
 
   useEffect(() => {

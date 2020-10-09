@@ -8,6 +8,7 @@ import App from './App';
 import AppStateProvider, { useAppState } from './state';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorDialog from './components/ErrorDialog/ErrorDialog';
+import LoginPage from './components/LoginPage/LoginPage';
 import HomePage from './components/HomePage/HomePage';
 import ThanksPage from './components/ThanksPage/ThanksPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
@@ -40,8 +41,14 @@ ReactDOM.render(
           <PrivateRoute path="/virtual-visit">
             <VideoApp />
           </PrivateRoute>
+          <Route path="/disconnected">
+            <ThanksPage />
+          </Route>
           <Route path="/thanks">
             <ThanksPage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
           </Route>
           <Route exact path="/">
             <HomePage />

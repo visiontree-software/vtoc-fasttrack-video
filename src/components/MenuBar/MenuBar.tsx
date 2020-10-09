@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     vtocLogo: {
-      width: '11rem',
-      display: 'block',
+      width: '100px',
+      // display: 'block',
     },
     exitButton: {
       marginLeft: '.5em',
@@ -89,7 +89,7 @@ export default function MenuBar() {
         <Grid container justify="space-around" alignItems="center">
           <Hidden smDown>
             <Grid style={{ flex: 1 }}>
-              <Typography variant="body1">{room.name}</Typography>
+              <VTOCLogo className={classes.vtocLogo} />
             </Grid>
           </Hidden>
           <Grid item>

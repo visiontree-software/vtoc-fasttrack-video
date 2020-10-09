@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { makeStyles, Typography, Grid, Button, Theme, Hidden } from '@material-ui/core';
 import LocalVideoPreview from './LocalVideoPreview/LocalVideoPreview';
 import SettingsMenu from './SettingsMenu/SettingsMenu';
@@ -23,18 +24,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   localPreviewContainer: {
     paddingRight: '2em',
     [theme.breakpoints.down('sm')]: {
-      padding: '0 2.5em',
+      padding: '0',
     },
   },
   joinButtons: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
       width: '100%',
       '& button': {
         margin: '0.5em 0',
       },
+    },
+    '&.isGuest': {
+      justifyContent: 'space-between',
     },
   },
   mobileButtonBar: {
@@ -48,6 +52,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0.8em 0',
     margin: 0,
   },
+  title: {
+    fontWeight: 400,
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
+  },
 }));
 
 interface DeviceSelectionScreenProps {
@@ -58,9 +71,10 @@ interface DeviceSelectionScreenProps {
 
 export default function DeviceSelectionScreen({ name, roomName, setStep }: DeviceSelectionScreenProps) {
   const classes = useStyles();
-  const { getToken, isFetching } = useAppState();
+  const { user, getToken, isFetching } = useAppState();
   const { connect, isAcquiringLocalTracks, isConnecting } = useVideoContext();
   const disableButtons = isFetching || isAcquiringLocalTracks || isConnecting;
+  const userIsPatient = user?.userType === 'patient';
 
   const handleJoin = () => {
     getToken(name, roomName).then(token => connect(token));
@@ -68,8 +82,8 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
 
   return (
     <>
-      <Typography variant="h5" className={classes.gutterBottom}>
-        Join {roomName}
+      <Typography variant="h6" className={classNames({ [classes.gutterBottom]: true, [classes.title]: true })}>
+        Click the "Join Now" button below to connect with your {userIsPatient ? 'careteam' : 'patient'}.
       </Typography>
 
       <Grid container justify="center">
@@ -93,10 +107,12 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
                 <ToggleVideoButton className={classes.deviceButton} disabled={disableButtons} />
               </Hidden>
             </div>
-            <div className={classes.joinButtons}>
-              <Button variant="outlined" color="primary" onClick={() => setStep(Steps.roomNameStep)}>
-                Cancel
-              </Button>
+            <div className={classNames({ [classes.joinButtons]: true, isGuest: !user?.token ? true : false })}>
+              {!user?.token && (
+                <Button variant="text" color="primary" onClick={() => setStep(Steps.roomNameStep)}>
+                  Cancel
+                </Button>
+              )}
               <Button
                 variant="contained"
                 color="primary"

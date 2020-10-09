@@ -3,6 +3,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core';
 import Swoosh from './swoosh';
 import VideoLogo from './VideoLogo';
 import TwilioLogo from './TwilioLogo';
+import { ReactComponent as VTOCLogo } from './logo.svg';
 import { useAppState } from '../../state';
 import UserMenu from './UserMenu/UserMenu';
 import { useLocation } from 'react-router-dom';
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'rgb(40, 42, 43)',
+    background: '#2d3748',
     height: '100%',
   },
   container: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '296px',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      height: '100px',
+      height: '75px',
       backgroundPositionY: '140px',
     },
   },
@@ -59,9 +60,10 @@ const useStyles = makeStyles((theme: Theme) => ({
       alignItems: 'center',
       width: '90%',
       textAlign: 'initial',
-      '& svg': {
-        height: '64px',
-      },
+      justifyContent: 'space-between',
+      // '& svg': {
+      // 	height: '64px',
+      // },
     },
   },
   twilioLogo: {
@@ -70,10 +72,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     left: 0,
     margin: '20px',
   },
+  vtocLogo: {
+    padding: '.5em',
+    background: '#fff',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    width: '80%',
+    borderRadius: '.5em',
+    [theme.breakpoints.down('sm')]: {
+      width: '30%',
+    },
+  },
   content: {
     background: 'white',
     width: '100%',
-    padding: '4em',
+    padding: '3em',
     flex: 1,
     [theme.breakpoints.down('sm')]: {
       padding: '2em',
@@ -81,10 +93,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     color: 'white',
-    margin: '1em 0 0',
+    margin: '.5em 0 0',
     [theme.breakpoints.down('sm')]: {
       margin: 0,
-      fontSize: '1.1rem',
+      fontSize: '1rem',
     },
   },
   subContentContainer: {
@@ -106,15 +118,15 @@ const IntroContainer = (props: IntroContainerProps) => {
 
   return (
     <div className={classes.background}>
-      <TwilioLogo className={classes.twilioLogo} />
-      {user && location.pathname !== '/login' && <UserMenu />}
+      {/* <VTOCLogo className={classes.vtocLogo} /> */}
+      {user && location.pathname !== '/login' && location.pathname !== '/disconnected' && <UserMenu />}
       <div className={classes.container}>
         <div className={classes.innerContainer}>
           <div className={classes.swooshContainer}>
             <div className={classes.logoContainer}>
-              <VideoLogo />
+              <VTOCLogo className={classes.vtocLogo} />
               <Typography variant="h6" className={classes.title}>
-                Twilio Programmable Video
+                VTOC FastTrack Video
               </Typography>
             </div>
           </div>

@@ -105,7 +105,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     identity: {
       background: 'rgba(0, 0, 0, 0.5)',
-      color: 'white',
       padding: '0.18em 0.3em',
       margin: 0,
       display: 'flex',
@@ -242,8 +241,8 @@ export default function ParticipantInfo({
           <span className={classes.identity}>
             <AudioLevelIndicator audioTrack={audioTrack} />
             <Typography variant="body1" className={classes.typeography} component="span">
-              {participantName}
-              {isLocalParticipant && ' (You)'}
+              {!isLocalParticipant && participantName}
+              {isLocalParticipant && '(You)'}
             </Typography>
           </span>
         </div>

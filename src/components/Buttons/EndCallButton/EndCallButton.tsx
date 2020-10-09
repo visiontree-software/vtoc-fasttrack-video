@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import { Button } from '@material-ui/core';
 
-import { useAppState } from '../../state';
-import useRoomState from '../../hooks/useRoomState/useRoomState';
+import { useAppState } from '../../../state';
+import useRoomState from '../../../hooks/useRoomState/useRoomState';
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,11 +59,17 @@ export default function EndCallButton(props: { className?: string }) {
     logEndSession(vtocUrl, user!.identity, user!.roomName);
     room.disconnect();
     signOut?.();
-    history.push('/thanks');
+    history.push('/disconnected');
   }, [room, signOut, history, vtocUrl, user]);
 
   return (
-    <Button onClick={disconnect} className={clsx(classes.button, props.className)} data-cy-disconnect>
+    <Button
+      onClick={disconnect}
+      variant="contained"
+      color="primary"
+      className={clsx(props.className)}
+      data-cy-disconnect
+    >
       Disconnect
     </Button>
   );

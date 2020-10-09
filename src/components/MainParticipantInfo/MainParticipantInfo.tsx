@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   identity: {
+    margin: '.5em 0 0 .5em',
     background: 'rgba(0, 0, 0, 0.5)',
-    color: 'white',
     padding: '0.1em 0.3em 0.1em 0',
     fontSize: '1.2em',
     color: '#fff',
@@ -143,6 +143,9 @@ export default function MainParticipantInfo({ participant, children }: MainParti
     const userId = user!.identity.toString();
     const participantId = participant.identity;
 
+    console.log('user id:', userId);
+    console.log('participantId:', participantId);
+
     if (userId !== participantId) {
       fetchPartipantName(vtocUrl, participant.identity, user!.roomName).then(result => {
         setUsername(`${result.firstName} ${result.lastName}`);
@@ -162,8 +165,8 @@ export default function MainParticipantInfo({ participant, children }: MainParti
         <div className={classes.identity}>
           <AudioLevelIndicator audioTrack={audioTrack} />
           <Typography variant="body1" color="inherit">
-            {participantName}
-            {isLocal && ' (You)'}
+            {!isLocal && participantName}
+            {isLocal && '(You)'}
             {screenSharePublication && ' - Screen'}
           </Typography>
         </div>
