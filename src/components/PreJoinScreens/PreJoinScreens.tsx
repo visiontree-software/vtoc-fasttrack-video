@@ -58,7 +58,7 @@ export default function PreJoinScreens() {
 
   const SubContent = (
     <>
-      {Video.testPreflight && <PreflightTest />}
+      {/* {Video.testPreflight && <PreflightTest />} */}
       <MediaErrorSnackbar error={mediaError} />
     </>
   );
