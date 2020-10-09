@@ -64,6 +64,13 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>) {
     contextValue = {
       ...contextValue,
       ...useTokenAuth(), // eslint-disable-line react-hooks/rules-of-hooks
+      getToken: async (identity, roomName) => {
+        const headers = new window.Headers();
+        const endpoint = process.env.REACT_APP_TOKEN_ENDPOINT || '/token';
+        const params = new window.URLSearchParams({ identity, roomName });
+
+        return fetch(`${endpoint}?${params}`, { headers }).then(res => res.text());
+      },
     };
   } else {
     contextValue = {
