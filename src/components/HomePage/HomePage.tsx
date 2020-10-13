@@ -1,84 +1,130 @@
 import React from 'react';
-import { styled, Theme, makeStyles } from '@material-ui/core/styles';
-
-import Button from '@material-ui/core/Button';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
+import Swoosh from './swoosh';
 import { ReactComponent as VTOCLogo } from './logo.svg';
-import Typography from '@material-ui/core/Typography';
+import { useLocation } from 'react-router-dom';
 
-import useHeight from '../../hooks/useHeight/useHeight';
-import useRoomState from '../../hooks/useRoomState/useRoomState';
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
+  background: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#2d3748',
+    height: '100%',
+  },
   container: {
-    height: '100vh',
-    background: '#fff',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'relative',
+    flex: '1',
   },
-  vtocLogo: {
-    width: '75%',
-    display: 'block',
-    marginBottom: '1.5em',
-  },
-  thanks: {
+  innerContainer: {
     display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    '& h6': {
-      fontWeight: '400',
+    width: '296px',
+    height: '379px',
+    borderRadius: '8px',
+    boxShadow: '0px 2px 4px 0px rgba(40, 42, 43, 0.3)',
+    overflow: 'hidden',
+    position: 'relative',
+    margin: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+      height: 'auto',
+      width: 'calc(100% - 40px)',
+      margin: 'auto',
+      maxWidth: '400px',
     },
   },
-});
+  swooshContainer: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundImage: Swoosh,
+    backgroundSize: 'cover',
+    width: '296px',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      height: '75px',
+      backgroundPositionY: '140px',
+    },
+  },
+  logoContainer: {
+    position: 'absolute',
+    width: '210px',
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      alignItems: 'center',
+      width: '90%',
+      textAlign: 'initial',
+      justifyContent: 'space-between',
+      // '& svg': {
+      // 	height: '64px',
+      // },
+    },
+  },
+  twilioLogo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    margin: '20px',
+  },
+  vtocLogo: {
+    padding: '.5em',
+    background: '#fff',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    width: '80%',
+    borderRadius: '.5em',
+    [theme.breakpoints.down('sm')]: {
+      width: '30%',
+    },
+  },
+  content: {
+    background: 'white',
+    width: '100%',
+    padding: '3em',
+    flex: 1,
+    [theme.breakpoints.down('sm')]: {
+      padding: '2em',
+    },
+  },
+  title: {
+    color: 'white',
+    margin: '.5em 0 0',
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+      fontSize: '1rem',
+    },
+  },
+  subContentContainer: {
+    position: 'absolute',
+    marginTop: '1em',
+    width: '100%',
+  },
+}));
 
-const Container = styled('div')({
-  display: 'grid',
-  gridTemplateRows: '1fr auto',
-});
-
-export default function LoginPage() {
-  const classes = useStyles();
-  //const roomState = useRoomState();
-
-  // Here we would like the height of the main container to be the height of the viewport.
-  // On some mobile browsers, 'height: 100vh' sets the height equal to that of the screen,
-  // not the viewport. This looks bad when the mobile browsers location bar is open.
-  // We will dynamically set the height with 'window.innerHeight', which means that this
-  // will look good on mobile browsers even after the location bar opens or closes.
-  const height = useHeight();
-
-  return (
-    <Container style={{ height }}>
-      <Grid container justify="center" className={classes.container}>
-        <div className={classes.thanks}>
-          <VTOCLogo className={classes.vtocLogo} />
-
-          <Typography variant="h6" color="textSecondary">
-            VTOC FastTrack Video
-          </Typography>
-        </div>
-      </Grid>
-    </Container>
-  );
+interface IntroContainerProps {
+  children: React.ReactNode;
+  subContent?: React.ReactNode;
 }
 
-// export default function LoginPage() {
-//   const classes = useStyles();
+export default function HomePage() {
+  const classes = useStyles();
+  const location = useLocation();
 
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <Grid container justify="center" alignItems="flex-start" className={classes.container}>
-//         <div className={classes.thanks}>
-//           <VTOCLogo className={classes.vtocLogo} />
-
-//           <Typography variant="h6" color="textSecondary">
-//             VTOC FastTrack Video
-//           </Typography>
-//         </div>
-//       </Grid>
-//     </ThemeProvider>
-//   );
-// }
+  return (
+    <div className={classes.background}>
+      <div className={classes.container}>
+        <div className={classes.innerContainer}>
+          <div className={classes.swooshContainer}>
+            <div className={classes.logoContainer}>
+              <VTOCLogo className={classes.vtocLogo} />
+              <Typography variant="h6" className={classes.title}>
+                VTOC FastTrack Video
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

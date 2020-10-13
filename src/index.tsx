@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import ErrorDialog from './components/ErrorDialog/ErrorDialog';
 import LoginPage from './components/LoginPage/LoginPage';
 import HomePage from './components/HomePage/HomePage';
-import ThanksPage from './components/ThanksPage/ThanksPage';
+import DisconnectedPage from './components/DisconnectedPage/DisconnectedPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import theme from './theme';
 import './types';
@@ -42,10 +42,7 @@ ReactDOM.render(
             <VideoApp />
           </PrivateRoute>
           <Route path="/disconnected">
-            <ThanksPage />
-          </Route>
-          <Route path="/thanks">
-            <ThanksPage />
+            <DisconnectedPage />
           </Route>
           <Route path="/login">
             <LoginPage />
