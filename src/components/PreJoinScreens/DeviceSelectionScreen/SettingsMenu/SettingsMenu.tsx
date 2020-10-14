@@ -4,11 +4,12 @@ import MenuContainer from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme, useMediaQuery } from '@material-ui/core';
+import { Hidden, makeStyles, Theme, useMediaQuery } from '@material-ui/core';
 
 import AboutDialog from '../../../AboutDialog/AboutDialog';
 import ConnectionOptionsDialog from '../../../ConnectionOptionsDialog/ConnectionOptionsDialog';
 import DeviceSelectionDialog from '../../../DeviceSelectionDialog/DeviceSelectionDialog';
+import ContactSupportDialog from '../../../ContactSupportDialog/ContactSupportDialog';
 import SettingsIcon from '../../../../icons/SettingsIcon';
 import { useAppState } from '../../../../state';
 
@@ -23,6 +24,7 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
   const { roomType } = useAppState();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [deviceSettingsOpen, setDeviceSettingsOpen] = useState(false);
   const [connectionSettingsOpen, setConnectionSettingsOpen] = useState(false);
@@ -59,10 +61,15 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
           horizontal: isMobile ? 'left' : 'right',
         }}
         transformOrigin={{
-          vertical: isMobile ? -55 : -45,
+          vertical: -10,
           horizontal: 'center',
         }}
       >
+        <Hidden mdUp>
+          <MenuItem onClick={() => setSupportOpen(true)}>
+            <Typography variant="body1">Support</Typography>
+          </MenuItem>
+        </Hidden>
         <MenuItem onClick={() => setAboutOpen(true)}>
           <Typography variant="body1">About</Typography>
         </MenuItem>
@@ -75,6 +82,13 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
           </MenuItem>
         )}
       </MenuContainer>
+      <ContactSupportDialog
+        open={supportOpen}
+        onClose={() => {
+          setSupportOpen(false);
+          setMenuOpen(false);
+        }}
+      />
       <AboutDialog
         open={aboutOpen}
         onClose={() => {

@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import EndCallButton from '../Buttons/EndCallButton/EndCallButton';
 import FlipCameraButton from './FlipCameraButton/FlipCameraButton';
+import ContactSupportButton from '../Buttons/ContactSupportButton/ContactSupportButton';
 import Menu from './Menu/Menu';
 import { ReactComponent as VTOCLogo } from './logo.svg';
 
@@ -99,11 +100,13 @@ export default function MenuBar() {
               <ToggleVideoButton disabled={isReconnecting} />
               <Hidden smDown>{!isSharingScreen && <ToggleScreenShareButton disabled={isReconnecting} />}</Hidden>
               <FlipCameraButton />
+              <ContactSupportButton />
             </Grid>
           </Grid>
           <Hidden smDown>
             <Grid style={{ flex: 1 }}>
               <Grid container justify="flex-end">
+                {/* <ContactSupportButton /> */}
                 <Menu />
                 <EndCallButton />
               </Grid>

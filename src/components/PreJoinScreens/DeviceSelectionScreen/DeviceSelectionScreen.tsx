@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { makeStyles, Typography, Grid, Button, Theme, Hidden } from '@material-ui/core';
 import LocalVideoPreview from './LocalVideoPreview/LocalVideoPreview';
 import SettingsMenu from './SettingsMenu/SettingsMenu';
+import ContactSupportButton from '../../Buttons/ContactSupportButton/ContactSupportButton';
 import { Steps } from '../PreJoinScreens';
 import ToggleAudioButton from '../../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleVideoButton from '../../Buttons/ToggleVideoButton/ToggleVideoButton';
@@ -97,6 +98,9 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
               <ToggleVideoButton className={classes.mobileButton} disabled={disableButtons} />
             </Hidden>
             <SettingsMenu mobileButtonClass={classes.mobileButton} />
+            <Hidden smDown>
+              <ContactSupportButton mobileButtonClass={classes.mobileButton} />
+            </Hidden>
           </div>
         </Grid>
         <Grid item md={5} sm={12} xs={12}>

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import ContactSupportDialog from '../../ContactSupportDialog/ContactSupportDialog';
 import AboutDialog from '../../AboutDialog/AboutDialog';
 import Button from '@material-ui/core/Button';
 import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDialog';
@@ -11,6 +12,7 @@ import { Theme, useMediaQuery } from '@material-ui/core';
 
 export default function Menu(props: { buttonClassName?: string }) {
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const [supportOpen, setSupportOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -42,6 +44,9 @@ export default function Menu(props: { buttonClassName?: string }) {
           horizontal: 'center',
         }}
       >
+        <MenuItem onClick={() => setSupportOpen(true)}>
+          <Typography variant="body1">Support</Typography>
+        </MenuItem>
         <MenuItem onClick={() => setAboutOpen(true)}>
           <Typography variant="body1">About</Typography>
         </MenuItem>
@@ -49,6 +54,13 @@ export default function Menu(props: { buttonClassName?: string }) {
           <Typography variant="body1">Audio and Video Settings</Typography>
         </MenuItem>
       </MenuContainer>
+      <ContactSupportDialog
+        open={supportOpen}
+        onClose={() => {
+          setSupportOpen(false);
+          setMenuOpen(false);
+        }}
+      />
       <AboutDialog
         open={aboutOpen}
         onClose={() => {
