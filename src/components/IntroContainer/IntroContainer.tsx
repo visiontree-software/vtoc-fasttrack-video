@@ -118,7 +118,6 @@ const IntroContainer = (props: IntroContainerProps) => {
 
   return (
     <div className={classes.background}>
-      {/* <VTOCLogo className={classes.vtocLogo} /> */}
       {user && location.pathname !== '/login' && location.pathname !== '/disconnected' && <UserMenu />}
       <div className={classes.container}>
         <div className={classes.innerContainer}>

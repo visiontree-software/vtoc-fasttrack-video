@@ -2,7 +2,11 @@ import React, { createContext, useContext, useReducer, useState } from 'react';
 import { RoomType } from '../types';
 import { TwilioError } from 'twilio-video';
 import { settingsReducer, initialSettings, Settings, SettingsAction } from './settings/settingsReducer';
+import useActiveSinkId from './useActiveSinkId/useActiveSinkId';
+import useFirebaseAuth from './useFirebaseAuth/useFirebaseAuth';
+import usePasscodeAuth from './usePasscodeAuth/usePasscodeAuth';
 import useTokenAuth from './useTokenAuth/useTokenAuth';
+import { User } from 'firebase';
 
 interface UserInfo {
   displayName?: string;
@@ -46,7 +50,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>) {
   const [error, setError] = useState<TwilioError | null>(null);
   const [user, setUserInfo] = useState<UserInfo | null>(null);
   const [isFetching, setIsFetching] = useState(false);
-  const [activeSinkId, setActiveSinkId] = useState('default');
+  const [activeSinkId, setActiveSinkId] = useActiveSinkId();
   const [settings, dispatchSetting] = useReducer(settingsReducer, initialSettings);
 
   let contextValue = {

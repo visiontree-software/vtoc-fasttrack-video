@@ -15,14 +15,6 @@ const Container = styled('div')({
   gridTemplateRows: '1fr auto',
 });
 
-const MainLocal = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  /*overflow: 'hidden',*/
-  width: '100%',
-});
-
 const Main = styled('main')(({ theme }: { theme: Theme }) => ({
   overflow: 'hidden',
   paddingBottom: `${theme.footerHeight}px`, // Leave some space for the footer

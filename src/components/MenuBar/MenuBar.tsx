@@ -95,7 +95,6 @@ export default function MenuBar() {
           </Hidden>
           <Grid item>
             <Grid container justify="center">
-              {/* <VTOCLogo className={classes.vtocLogo} /> */}
               <ToggleAudioButton disabled={isReconnecting} />
               <ToggleVideoButton disabled={isReconnecting} />
               <Hidden smDown>{!isSharingScreen && <ToggleScreenShareButton disabled={isReconnecting} />}</Hidden>
@@ -106,7 +105,6 @@ export default function MenuBar() {
           <Hidden smDown>
             <Grid style={{ flex: 1 }}>
               <Grid container justify="flex-end">
-                {/* <ContactSupportButton /> */}
                 <Menu />
                 <EndCallButton />
               </Grid>
